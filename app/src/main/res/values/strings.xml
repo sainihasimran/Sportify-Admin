@@ -1,12 +1,22 @@
 <resources>
     <string name="app_name">Sportify - Admin</string>
-    <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- Add Product Screen -->
+    <string name="add_images">Add images</string>
+    <string name="add_image_directions">You can add up to 4 images</string>
+    <string name="name">Name</string>
+    <string name="price">Price</string>
+    <string name="description">Description</string>
+    <string name="category">Category</string>
+    <string name="sub_category">Sub-Category</string>
+    <string name="available_sizes">Available Sizes</string>
+    <string name="small">Small</string>
+    <string name="x_small">X-Small</string>
+    <string name="medium">Medium</string>
+    <string name="large">Large</string>
+    <string name="x_large">X-Large</string>
+    <string name="_0">0</string>
+    <string name="available_colors">Available Colors</string>
+    <string name="add_color">Add Color</string>
+    <string name="add_product">Add Product</string>
 </resources>
