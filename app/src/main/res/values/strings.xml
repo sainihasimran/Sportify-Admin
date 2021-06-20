@@ -19,4 +19,6 @@
     <string name="available_colors">Available Colors</string>
     <string name="add_color">Add Color</string>
     <string name="add_product">Add Product</string>
+    <string name="storage_permission_declined">Storage Permission Declined</string>
+    <string name="choose_image_error">Error while choosing images</string>
 </resources>
