@@ -63,6 +63,8 @@ public class AddProductFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupChooseProductImages(view);
+        setupCategories(view);
+        setupSubCategories(view);
     }
 
     @Override
@@ -105,19 +107,29 @@ public class AddProductFragment extends Fragment {
         categories.add("Outerwear");
         categories.add("Headwear");
 
-        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
+        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, categories);
         AutoCompleteTextView categoryTextView = view.findViewById(R.id.category_textView);
         categoryTextView.setAdapter(categoriesAdapter);
 
-        categoryTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String category = categories.get(position);
-            }
+        categoryTextView.setOnItemClickListener((parent, view1, position, id) -> {
+            String category = categories.get(position);
         });
     }
 
-    
+    public void setupSubCategories(View view) {
+        List<String> subCategories = new ArrayList<>();
+        subCategories.add("Men's");
+        subCategories.add("Womens'");
+
+        ArrayAdapter<String> subCategoriesAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1,
+                                                                       subCategories);
+        AutoCompleteTextView subCategoryTextView = view.findViewById(R.id.sub_category_textView);
+        subCategoryTextView.setAdapter(subCategoriesAdapter);
+
+        subCategoryTextView.setOnItemClickListener((parent, view1, position, id) -> {
+            String subCategory = subCategories.get(position);
+        });
+    }
 
     private void pickImage() {
         ImagePickerConfig config = new ImagePickerConfig(ImagePickerMode.MULTIPLE, "Folder", "Tap to select", "DONE", 0, 4, 0, true, false, false,
