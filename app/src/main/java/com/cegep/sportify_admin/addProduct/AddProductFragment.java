@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -22,6 +25,7 @@ import com.esafirm.imagepicker.model.Image;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
@@ -91,6 +95,29 @@ public class AddProductFragment extends Fragment {
         addImageText.setOnClickListener(onClickListener);
         addImageDirectionsText.setOnClickListener(onClickListener);
     }
+
+    public void setupCategories(View view) {
+        List<String> categories = new ArrayList<>();
+        categories.add("Footwear");
+        categories.add("Tops");
+        categories.add("Bottoms");
+        categories.add("Swimwear");
+        categories.add("Outerwear");
+        categories.add("Headwear");
+
+        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
+        AutoCompleteTextView categoryTextView = view.findViewById(R.id.category_textView);
+        categoryTextView.setAdapter(categoriesAdapter);
+
+        categoryTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String category = categories.get(position);
+            }
+        });
+    }
+
+    
 
     private void pickImage() {
         ImagePickerConfig config = new ImagePickerConfig(ImagePickerMode.MULTIPLE, "Folder", "Tap to select", "DONE", 0, 4, 0, true, false, false,
