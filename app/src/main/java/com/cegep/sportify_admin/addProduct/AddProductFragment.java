@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,11 +33,20 @@ import com.esafirm.imagepicker.features.ImagePickerMode;
 import com.esafirm.imagepicker.features.ImagePickerSavePath;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
 public class AddProductFragment extends Fragment {
@@ -355,13 +365,14 @@ public class AddProductFragment extends Fragment {
     private void setupAddButtonClick(View view) {
         addProductButton = view.findViewById(R.id.add_product_button);
         addProductButton.setOnClickListener(v -> {
-            if (addProductRequest.isValid(requireContext())) {
-                if (images.isEmpty()) {
-                    addProduct();
-                } else {
-                    uploadImages();
-                }
-            }
+//            if (addProductRequest.isValid(requireContext())) {
+//                if (images.isEmpty()) {
+//                    addProduct();
+//                } else {
+//                    uploadImages();
+//                }
+//            }
+            uploadImages();
         });
     }
 
@@ -375,7 +386,45 @@ public class AddProductFragment extends Fragment {
     }
 
     private void uploadImages() {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        List<String> imageUrls = new ArrayList<>();
+        List<String> uuids = new ArrayList<>();
 
+        List<UploadTask> uploadTasks = new ArrayList<>();
+
+        for (Image image : images) {
+            try {
+                String uuid = getUniqueId();
+                uuids.add(uuid);
+
+                InputStream stream = new FileInputStream(new File(image.getPath()));
+                StorageReference child = storageReference.child(uuid);
+
+                UploadTask uploadTask = child.putStream(stream);
+                uploadTasks.add(uploadTask);
+            } catch (Exception e) {
+                Toast.makeText(requireContext(), "Failed to upload images", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        Task<List<Task<?>>> uploadTask = Tasks.whenAllSuccess(uploadTasks);
+        uploadTask.continueWithTask(task -> {
+            List<Task<Uri>> downloadUrlTasks = new ArrayList<>();
+            for (String uuid : uuids) {
+                StorageReference child = storageReference.child(uuid);
+                downloadUrlTasks.add(child.getDownloadUrl());
+            }
+
+            return Tasks.whenAllSuccess(downloadUrlTasks);
+        }).addOnSuccessListener(objects -> {
+            for (Object object : objects) {
+                imageUrls.add(object.toString());
+            }
+
+            addProductRequest.setImages(imageUrls);
+            addProduct();
+        }).addOnFailureListener(e -> Toast.makeText(requireContext(), "Failed to upload images", Toast.LENGTH_SHORT).show());
     }
 
     private void addProduct() {
@@ -387,5 +436,9 @@ public class AddProductFragment extends Fragment {
         addImagePlaceholder.setVisibility(visibility);
         addImageText.setVisibility(visibility);
         addImageDirectionsText.setVisibility(visibility);
+    }
+
+    private String getUniqueId() {
+        return UUID.randomUUID().toString().replace("-", "");
     }
 }
