@@ -22,4 +22,9 @@
     <string name="storage_permission_declined">Storage Permission Declined</string>
     <string name="choose_image_error">Error while choosing images</string>
     <string name="choose_color">Choose Color</string>
+    <string name="error_empty_product_name">Please enter product name</string>
+    <string name="error_empty_product_price">Please enter a valid price</string>
+    <string name="error_empty_product_category">Please enter product category</string>
+    <string name="error_empty_product_sub_category">Please enter product sub-category</string>
+    <string name="error_empty_product_description">Please enter product description</string>
 </resources>

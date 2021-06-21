@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.cegep.sportify_admin.R;
+import com.cegep.sportify_admin.model.AddProductRequest;
 import com.esafirm.imagepicker.features.ImagePickerConfig;
 import com.esafirm.imagepicker.features.ImagePickerLauncher;
 import com.esafirm.imagepicker.features.ImagePickerLauncherKt;
@@ -31,11 +35,8 @@ import com.esafirm.imagepicker.model.Image;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 public class AddProductFragment extends Fragment {
@@ -44,38 +45,46 @@ public class AddProductFragment extends Fragment {
 
     private ViewPager viewPager;
     private WormDotsIndicator dotsIndicator;
-
     private ImageView addImageBackground;
     private ImageView addImagePlaceholder;
     private TextView addImageText;
     private TextView addImageDirectionsText;
 
-    private List<Image> images;
-    private Set<String> colorSet = new HashSet<>();
+    private EditText nameEditText;
+    private EditText priceEditText;
+    private EditText descriptionEditText;
+    private EditText xSmallEditText;
+    private EditText smallEditText;
+    private EditText mediumEditText;
+    private EditText largeEditText;
+    private EditText xLargeEditText;
+
+    private Button addProductButton;
+
+    private List<Image> images = new ArrayList<>();
+    private final AddProductRequest addProductRequest = new AddProductRequest();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_product, container, false);
-        viewPager = view.findViewById(R.id.viewPager);
-        dotsIndicator = view.findViewById(R.id.dots_indicator);
-
-        addImageBackground = view.findViewById(R.id.add_image_background);
-        addImagePlaceholder = view.findViewById(R.id.add_image_placeholder);
-        addImageText = view.findViewById(R.id.add_image_text);
-        addImageDirectionsText = view.findViewById(R.id.add_image_directions_text);
-        return view;
+        return inflater.inflate(R.layout.fragment_add_product, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setupImagePager(view);
         setupChooseProductImages(view);
+        setupProductNameInput(view);
+        setupPriceInput(view);
         setupCategories(view);
         setupSubCategories(view);
+        setupDescription(view);
+        setupSizesInput(view);
         setupColorPicker(view);
+        setupAddButtonClick(view);
     }
 
     @Override
@@ -99,17 +108,65 @@ public class AddProductFragment extends Fragment {
         });
     }
 
+    private void setupImagePager(View view) {
+        viewPager = view.findViewById(R.id.viewPager);
+        dotsIndicator = view.findViewById(R.id.dots_indicator);
+    }
+
     private void setupChooseProductImages(View view) {
-        View.OnClickListener onClickListener = v -> {
-            pickImage();
-        };
+        addImageBackground = view.findViewById(R.id.add_image_background);
+        addImagePlaceholder = view.findViewById(R.id.add_image_placeholder);
+        addImageText = view.findViewById(R.id.add_image_text);
+        addImageDirectionsText = view.findViewById(R.id.add_image_directions_text);
+
+        View.OnClickListener onClickListener = v -> pickImage();
         addImageBackground.setOnClickListener(onClickListener);
         addImagePlaceholder.setOnClickListener(onClickListener);
         addImageText.setOnClickListener(onClickListener);
         addImageDirectionsText.setOnClickListener(onClickListener);
     }
 
-    public void setupCategories(View view) {
+    private void setupProductNameInput(View view) {
+        nameEditText = view.findViewById(R.id.name_editText);
+        nameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addProductRequest.setProductName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupPriceInput(View view) {
+        priceEditText = view.findViewById(R.id.price_editText);
+        priceEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addProductRequest.setProductPrice(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupCategories(View view) {
         List<String> categories = new ArrayList<>();
         categories.add("Footwear");
         categories.add("Tops");
@@ -124,10 +181,11 @@ public class AddProductFragment extends Fragment {
 
         categoryTextView.setOnItemClickListener((parent, view1, position, id) -> {
             String category = categories.get(position);
+            addProductRequest.setCategory(category);
         });
     }
 
-    public void setupSubCategories(View view) {
+    private void setupSubCategories(View view) {
         List<String> subCategories = new ArrayList<>();
         subCategories.add("Men's");
         subCategories.add("Womens'");
@@ -139,47 +197,170 @@ public class AddProductFragment extends Fragment {
 
         subCategoryTextView.setOnItemClickListener((parent, view1, position, id) -> {
             String subCategory = subCategories.get(position);
+            addProductRequest.setSubCategory(subCategory);
         });
     }
 
-    public void setupColorPicker(View view) {
-        ChipGroup chipGroup = view.findViewById(R.id.available_color_group);
-        view.findViewById(R.id.add_color_chip).setOnClickListener(new View.OnClickListener() {
+    private void setupDescription(View view) {
+        descriptionEditText = view.findViewById(R.id.description_editText);
+        descriptionEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                builder.setTitle(R.string.choose_color);
-                builder.setMessage("Enter hex color in the form #RRGGBB");
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                View view1 = LayoutInflater.from(requireContext()).inflate(R.layout.color_input_layout, null, false);
-                EditText inputEditText = view1.findViewById(R.id.input_text);
-                builder.setView(view1);
+            }
 
-                builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    String hexColor = "#" + inputEditText.getText().toString();
-                    Chip chip = (Chip) LayoutInflater.from(requireContext()).inflate(R.layout.color_chip, chipGroup, false);
-                    try {
-                        int color = Color.parseColor(hexColor);
-                        chip.setChipBackgroundColor(ColorStateList.valueOf(color));
-                        if (!colorSet.contains(hexColor)) {
-                            int numOfChildren = chipGroup.getChildCount();
-                            chipGroup.addView(chip, numOfChildren - 1);
-                            colorSet.add(hexColor);
-                        } else {
-                            Toast.makeText(requireContext(), "Color already added", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (IllegalArgumentException e) {
-                        Toast.makeText(requireContext(), "Invalid color", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addProductRequest.setDescription(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupSizesInput(View view) {
+        xSmallEditText = view.findViewById(R.id.x_small_text);
+        xSmallEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addProductRequest.setxSmallSize(Integer.parseInt(s.toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        smallEditText = view.findViewById(R.id.small_text);
+        smallEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addProductRequest.setSmallSize(Integer.parseInt(s.toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mediumEditText = view.findViewById(R.id.medium_text);
+        mediumEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addProductRequest.setMediumSize(Integer.parseInt(s.toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        largeEditText = view.findViewById(R.id.large_text);
+        largeEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addProductRequest.setLargeSize(Integer.parseInt(s.toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        xLargeEditText = view.findViewById(R.id.x_large_text);
+        xLargeEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addProductRequest.setxLargeSize(Integer.parseInt(s.toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupColorPicker(View view) {
+        ChipGroup chipGroup = view.findViewById(R.id.available_color_group);
+        view.findViewById(R.id.add_color_chip).setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle(R.string.choose_color);
+            builder.setMessage("Enter hex color in the form #RRGGBB");
+
+            View view1 = LayoutInflater.from(requireContext()).inflate(R.layout.color_input_layout, null, false);
+            EditText inputEditText = view1.findViewById(R.id.input_text);
+            builder.setView(view1);
+
+            builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                String hexColor = "#" + inputEditText.getText().toString();
+                Chip chip = (Chip) LayoutInflater.from(requireContext()).inflate(R.layout.color_chip, chipGroup, false);
+                try {
+                    int color = Color.parseColor(hexColor);
+                    chip.setChipBackgroundColor(ColorStateList.valueOf(color));
+                    if (!addProductRequest.hasColor(hexColor)) {
+                        int numOfChildren = chipGroup.getChildCount();
+                        chipGroup.addView(chip, numOfChildren - 1);
+                        addProductRequest.addColor(hexColor);
+                    } else {
+                        Toast.makeText(requireContext(), "Color already added", Toast.LENGTH_SHORT).show();
                     }
-                });
-
-                builder.setNegativeButton(android.R.string.cancel, null);
-                AlertDialog dialog = builder.create();
-                Window window = dialog.getWindow();
-                if (window != null) {
-                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                } catch (IllegalArgumentException e) {
+                    Toast.makeText(requireContext(), "Invalid color", Toast.LENGTH_SHORT).show();
                 }
-                dialog.show();
+            });
+
+            builder.setNegativeButton(android.R.string.cancel, null);
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            if (window != null) {
+                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            }
+            dialog.show();
+        });
+    }
+
+    private void setupAddButtonClick(View view) {
+        addProductButton = view.findViewById(R.id.add_product_button);
+        addProductButton.setOnClickListener(v -> {
+            if (addProductRequest.isValid(requireContext())) {
+                if (images.isEmpty()) {
+                    addProduct();
+                } else {
+                    uploadImages();
+                }
             }
         });
     }
@@ -187,9 +368,17 @@ public class AddProductFragment extends Fragment {
     private void pickImage() {
         ImagePickerConfig config = new ImagePickerConfig(ImagePickerMode.MULTIPLE, "Folder", "Tap to select", "DONE", 0, 4, 0, true, false, false,
                                                          false, false,
-                                                         new ArrayList<Image>(), new ArrayList<File>(), new ImagePickerSavePath("Camera", true),
+                                                         new ArrayList<>(), new ArrayList<>(), new ImagePickerSavePath("Camera", true),
                                                          ReturnMode.NONE, false, true);
         imagepickerLauncher.launch(config);
+
+    }
+
+    private void uploadImages() {
+
+    }
+
+    private void addProduct() {
 
     }
 
