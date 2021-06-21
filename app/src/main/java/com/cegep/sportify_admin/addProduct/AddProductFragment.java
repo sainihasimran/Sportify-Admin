@@ -1,15 +1,21 @@
 package com.cegep.sportify_admin.addProduct;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,11 +28,14 @@ import com.esafirm.imagepicker.features.ImagePickerMode;
 import com.esafirm.imagepicker.features.ImagePickerSavePath;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 public class AddProductFragment extends Fragment {
@@ -42,6 +51,7 @@ public class AddProductFragment extends Fragment {
     private TextView addImageDirectionsText;
 
     private List<Image> images;
+    private Set<String> colorSet = new HashSet<>();
 
     @Nullable
     @Override
@@ -65,6 +75,7 @@ public class AddProductFragment extends Fragment {
         setupChooseProductImages(view);
         setupCategories(view);
         setupSubCategories(view);
+        setupColorPicker(view);
     }
 
     @Override
@@ -128,6 +139,48 @@ public class AddProductFragment extends Fragment {
 
         subCategoryTextView.setOnItemClickListener((parent, view1, position, id) -> {
             String subCategory = subCategories.get(position);
+        });
+    }
+
+    public void setupColorPicker(View view) {
+        ChipGroup chipGroup = view.findViewById(R.id.available_color_group);
+        view.findViewById(R.id.add_color_chip).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setTitle(R.string.choose_color);
+                builder.setMessage("Enter hex color in the form #RRGGBB");
+
+                View view1 = LayoutInflater.from(requireContext()).inflate(R.layout.color_input_layout, null, false);
+                EditText inputEditText = view1.findViewById(R.id.input_text);
+                builder.setView(view1);
+
+                builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    String hexColor = "#" + inputEditText.getText().toString();
+                    Chip chip = (Chip) LayoutInflater.from(requireContext()).inflate(R.layout.color_chip, chipGroup, false);
+                    try {
+                        int color = Color.parseColor(hexColor);
+                        chip.setChipBackgroundColor(ColorStateList.valueOf(color));
+                        if (!colorSet.contains(hexColor)) {
+                            int numOfChildren = chipGroup.getChildCount();
+                            chipGroup.addView(chip, numOfChildren - 1);
+                            colorSet.add(hexColor);
+                        } else {
+                            Toast.makeText(requireContext(), "Color already added", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (IllegalArgumentException e) {
+                        Toast.makeText(requireContext(), "Invalid color", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.setNegativeButton(android.R.string.cancel, null);
+                AlertDialog dialog = builder.create();
+                Window window = dialog.getWindow();
+                if (window != null) {
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                }
+                dialog.show();
+            }
         });
     }
 
