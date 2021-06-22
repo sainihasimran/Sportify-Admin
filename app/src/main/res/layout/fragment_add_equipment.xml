@@ -182,6 +182,62 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.4" />
+
+        <TextView
+            android:id="@+id/available_stock_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_l"
+            android:text="@string/available_stock"
+            android:textAppearance="?textAppearanceSubtitle2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description_input" />
+
+        <TextView
+            android:id="@+id/stock_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_l"
+            android:layout_marginLeft="@dimen/size_l"
+            android:layout_marginTop="@dimen/size_m"
+            android:text="@string/stock"
+            android:textAppearance="?textAppearanceSubtitle1"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/stock_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/stock_input" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/stock_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_l"
+            android:layout_marginLeft="@dimen/size_l"
+            android:layout_marginTop="@dimen/size_m"
+            app:boxBackgroundColor="@color/white"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="@id/guideline"
+            app:layout_constraintStart_toEndOf="@id/stock_label"
+            app:layout_constraintTop_toBottomOf="@id/available_stock_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/stock_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:paddingTop="@dimen/size_l"
+                android:text="@string/_0" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_product_button"
             android:layout_width="match_parent"
@@ -189,7 +245,7 @@
             android:layout_margin="@dimen/size_l"
             android:text="@string/add_equipment"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description_input" />
+            app:layout_constraintTop_toBottomOf="@id/stock_input" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

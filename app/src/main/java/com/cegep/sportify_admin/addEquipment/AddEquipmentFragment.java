@@ -58,6 +58,7 @@ public class AddEquipmentFragment extends Fragment {
     private EditText saleEditText;
     private EditText sportEditText;
     private EditText descriptionEditText;
+    private EditText stockEditText;
 
     private Button addEquipmentButton;
 
@@ -84,6 +85,7 @@ public class AddEquipmentFragment extends Fragment {
         setupSaleInput(view);
         setupSportInput(view);
         setupProductDescriptionInput(view);
+        setupStockInput(view);
         setupAddButtonClick(view);
     }
 
@@ -221,6 +223,30 @@ public class AddEquipmentFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 addEquipmentRequest.setDescription(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupStockInput(View view) {
+        stockEditText = view.findViewById(R.id.stock_text);
+        stockEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    addEquipmentRequest.setStock(0);
+                } else {
+                    addEquipmentRequest.setStock(Integer.parseInt(s.toString()));
+                }
             }
 
             @Override

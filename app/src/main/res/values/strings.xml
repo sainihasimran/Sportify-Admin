@@ -32,8 +32,10 @@
 
     <!-- Add Equipment Screen -->
     <string name="sport">Sport</string>
+    <string name="available_stock">Available Stock</string>
+    <string name="stock">Stock</string>
+    <string name="add_equipment">Add Equipment</string>
     <string name="error_empty_equipment_name">Please enter equipment name</string>
     <string name="error_empty_equipment_price">Please enter a valid price</string>
     <string name="error_empty_equipment_sport">Please enter a valid sport</string>
-    <string name="add_equipment">Add Equipment</string>
 </resources>

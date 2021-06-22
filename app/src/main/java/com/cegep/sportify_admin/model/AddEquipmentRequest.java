@@ -15,6 +15,8 @@ public class AddEquipmentRequest {
 
     private int sale;
 
+    private int stock;
+
     private String sport;
 
     private String description;
@@ -47,6 +49,14 @@ public class AddEquipmentRequest {
 
     public String getSport() {
         return sport;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
     public void setSport(String sport) {
