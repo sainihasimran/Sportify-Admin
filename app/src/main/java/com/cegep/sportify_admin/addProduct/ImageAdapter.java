@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.esafirm.imagepicker.model.Image;
 import java.util.List;
 
-class ImageAdapter extends FragmentPagerAdapter {
+public class ImageAdapter extends FragmentPagerAdapter {
 
     private final List<Image> images;
 

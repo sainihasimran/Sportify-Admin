@@ -8,7 +8,7 @@
     <!-- TODO remove this fragment -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container_view"
-        android:name="com.cegep.sportify_admin.addProduct.AddProductFragment"
+        android:name="com.cegep.sportify_admin.addEquipment.AddEquipmentFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -54,8 +54,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class AddProductFragment extends Fragment {
 
-    private ImagePickerLauncher imagepickerLauncher = null;
-
     private ViewPager viewPager;
     private WormDotsIndicator dotsIndicator;
     private ImageView addImageBackground;
@@ -75,6 +73,7 @@ public class AddProductFragment extends Fragment {
 
     private Button addProductButton;
 
+    private ImagePickerLauncher imagepickerLauncher = null;
     private List<Image> images = new ArrayList<>();
     private final AddProductRequest addProductRequest = new AddProductRequest();
 

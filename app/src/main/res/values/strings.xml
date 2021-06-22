@@ -29,4 +29,11 @@
     <string name="error_empty_product_sub_category">Please enter product sub-category</string>
     <string name="error_empty_product_description">Please enter product description</string>
     <string name="error_invalid_sale">Sale value cannot be more than 100</string>
+
+    <!-- Add Equipment Screen -->
+    <string name="sport">Sport</string>
+    <string name="error_empty_equipment_name">Please enter equipment name</string>
+    <string name="error_empty_equipment_price">Please enter a valid price</string>
+    <string name="error_empty_equipment_sport">Please enter a valid sport</string>
+    <string name="add_equipment">Add Equipment</string>
 </resources>

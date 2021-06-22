@@ -143,13 +143,32 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sport_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_l"
+            android:hint="@string/sport"
+            app:layout_constraintTop_toBottomOf="@id/sale_input">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sport_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:textColor="@color/black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/description_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size_l"
             android:hint="@string/description"
-            app:layout_constraintTop_toBottomOf="@id/sale_input">
+            app:layout_constraintTop_toBottomOf="@id/sport_input">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/description_editText"
@@ -168,7 +187,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size_l"
-            android:text="@string/add_product"
+            android:text="@string/add_equipment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/description_input" />
 

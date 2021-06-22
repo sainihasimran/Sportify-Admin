@@ -180,7 +180,7 @@ public class AddProductRequest {
             return false;
         }
 
-        if (sale > 100) {
+        if (getSale() > 100) {
             Toast.makeText(context, R.string.error_invalid_sale, Toast.LENGTH_SHORT).show();
             return false;
         }
