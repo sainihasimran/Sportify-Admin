@@ -5,7 +5,8 @@
     <string name="add_images">Add images</string>
     <string name="add_image_directions">You can add up to 4 images</string>
     <string name="name">Name</string>
-    <string name="price">Price</string>
+    <string name="original_price">Original Price</string>
+    <string name="sale">Sale</string>
     <string name="description">Description</string>
     <string name="category">Category</string>
     <string name="sub_category">Sub-Category</string>
@@ -27,4 +28,5 @@
     <string name="error_empty_product_category">Please enter product category</string>
     <string name="error_empty_product_sub_category">Please enter product sub-category</string>
     <string name="error_empty_product_description">Please enter product description</string>
+    <string name="error_invalid_sale">Sale value cannot be more than 100</string>
 </resources>

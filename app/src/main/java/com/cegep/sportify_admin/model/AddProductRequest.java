@@ -5,15 +5,15 @@ import android.text.TextUtils;
 import android.widget.Toast;
 import com.cegep.sportify_admin.R;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class AddProductRequest {
 
     private String productName;
 
     private float price = -1f;
+
+    private int sale = 0;
 
     private String category;
 
@@ -31,7 +31,7 @@ public class AddProductRequest {
 
     private int xLargeSize = 0;
 
-    private Set<String> colors = new HashSet<>();
+    private List<String> colors = new ArrayList<>();
 
     private List<String> images = new ArrayList<>();
 
@@ -49,6 +49,14 @@ public class AddProductRequest {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public int getSale() {
+        return sale;
+    }
+
+    public void setSale(int sale) {
+        this.sale = sale;
     }
 
     public String getCategory() {
@@ -115,11 +123,11 @@ public class AddProductRequest {
         this.xLargeSize = xLargeSize;
     }
 
-    public Set<String> getColors() {
+    public List<String> getColors() {
         return colors;
     }
 
-    public void setColors(Set<String> colors) {
+    public void setColors(List<String> colors) {
         this.colors = colors;
     }
 
@@ -169,6 +177,11 @@ public class AddProductRequest {
 
         if (TextUtils.isEmpty(getDescription())) {
             Toast.makeText(context, R.string.error_empty_product_description, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (sale > 100) {
+            Toast.makeText(context, R.string.error_invalid_sale, Toast.LENGTH_SHORT).show();
             return false;
         }
 

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -62,6 +65,7 @@ public class AddProductFragment extends Fragment {
 
     private EditText nameEditText;
     private EditText priceEditText;
+    private EditText saleEditText;
     private EditText descriptionEditText;
     private EditText xSmallEditText;
     private EditText smallEditText;
@@ -89,6 +93,7 @@ public class AddProductFragment extends Fragment {
         setupChooseProductImages(view);
         setupProductNameInput(view);
         setupPriceInput(view);
+        setupSaleEditText(view);
         setupCategories(view);
         setupSubCategories(view);
         setupDescription(view);
@@ -176,6 +181,30 @@ public class AddProductFragment extends Fragment {
         });
     }
 
+    private void setupSaleEditText(View view) {
+        saleEditText = view.findViewById(R.id.sale_editText);
+        saleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    addProductRequest.setSale(0);
+                } else {
+                    addProductRequest.setSale(Integer.parseInt(s.toString()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
     private void setupCategories(View view) {
         List<String> categories = new ArrayList<>();
         categories.add("Footwear");
@@ -241,7 +270,11 @@ public class AddProductFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addProductRequest.setxSmallSize(Integer.parseInt(s.toString()));
+                if (TextUtils.isEmpty(s)) {
+                    addProductRequest.setxSmallSize(0);
+                } else {
+                    addProductRequest.setxSmallSize(Integer.parseInt(s.toString()));
+                }
             }
 
             @Override
@@ -259,7 +292,11 @@ public class AddProductFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addProductRequest.setSmallSize(Integer.parseInt(s.toString()));
+                if (TextUtils.isEmpty(s)) {
+                    addProductRequest.setSmallSize(0);
+                } else {
+                    addProductRequest.setSmallSize(Integer.parseInt(s.toString()));
+                }
             }
 
             @Override
@@ -277,7 +314,11 @@ public class AddProductFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addProductRequest.setMediumSize(Integer.parseInt(s.toString()));
+                if (TextUtils.isEmpty(s)) {
+                    addProductRequest.setMediumSize(0);
+                } else {
+                    addProductRequest.setMediumSize(Integer.parseInt(s.toString()));
+                }
             }
 
             @Override
@@ -295,7 +336,11 @@ public class AddProductFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addProductRequest.setLargeSize(Integer.parseInt(s.toString()));
+                if (TextUtils.isEmpty(s)) {
+                    addProductRequest.setLargeSize(0);
+                } else {
+                    addProductRequest.setLargeSize(Integer.parseInt(s.toString()));
+                }
             }
 
             @Override
@@ -313,7 +358,11 @@ public class AddProductFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addProductRequest.setxLargeSize(Integer.parseInt(s.toString()));
+                if (TextUtils.isEmpty(s)) {
+                    addProductRequest.setxLargeSize(0);
+                } else {
+                    addProductRequest.setxLargeSize(Integer.parseInt(s.toString()));
+                }
             }
 
             @Override
@@ -365,14 +414,13 @@ public class AddProductFragment extends Fragment {
     private void setupAddButtonClick(View view) {
         addProductButton = view.findViewById(R.id.add_product_button);
         addProductButton.setOnClickListener(v -> {
-//            if (addProductRequest.isValid(requireContext())) {
-//                if (images.isEmpty()) {
-//                    addProduct();
-//                } else {
-//                    uploadImages();
-//                }
-//            }
-            uploadImages();
+            if (addProductRequest.isValid(requireContext())) {
+                if (images.isEmpty()) {
+                    addProduct();
+                } else {
+                    uploadImages();
+                }
+            }
         });
     }
 
@@ -428,7 +476,11 @@ public class AddProductFragment extends Fragment {
     }
 
     private void addProduct() {
-
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference productsReference = databaseReference.child("Brand").child("Products");
+        String productId = productsReference.push().getKey();
+        DatabaseReference productReference = productsReference.child(productId);
+        productReference.setValue(addProductRequest);
     }
 
     private void setChooseImageVisibility(int visibility) {
