@@ -17,6 +17,8 @@ public class AddEquipmentRequest {
 
     private int stock;
 
+    private long createdAt;
+
     private String sport;
 
     private String description;
@@ -57,6 +59,14 @@ public class AddEquipmentRequest {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
     }
 
     public void setSport(String sport) {

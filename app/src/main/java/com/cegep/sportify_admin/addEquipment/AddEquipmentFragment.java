@@ -325,6 +325,7 @@ public class AddEquipmentFragment extends Fragment {
         DatabaseReference productsReference = databaseReference.child("Brand").child("Equipments");
         String equipmentId = productsReference.push().getKey();
         DatabaseReference productReference = productsReference.child(equipmentId);
+        addEquipmentRequest.setCreatedAt(System.currentTimeMillis());
         productReference.setValue(addEquipmentRequest);
     }
 

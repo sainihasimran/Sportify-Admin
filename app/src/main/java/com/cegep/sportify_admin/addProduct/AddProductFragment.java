@@ -479,6 +479,7 @@ public class AddProductFragment extends Fragment {
         DatabaseReference productsReference = databaseReference.child("Brand").child("Products");
         String productId = productsReference.push().getKey();
         DatabaseReference productReference = productsReference.child(productId);
+        addProductRequest.setCreatedAt(System.currentTimeMillis());
         productReference.setValue(addProductRequest);
     }
 

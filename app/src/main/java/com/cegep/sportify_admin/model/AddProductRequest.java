@@ -31,6 +31,8 @@ public class AddProductRequest {
 
     private int xLargeSize = 0;
 
+    private long createdAt;
+
     private List<String> colors = new ArrayList<>();
 
     private List<String> images = new ArrayList<>();
@@ -121,6 +123,14 @@ public class AddProductRequest {
 
     public void setxLargeSize(int xLargeSize) {
         this.xLargeSize = xLargeSize;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
     }
 
     public List<String> getColors() {
