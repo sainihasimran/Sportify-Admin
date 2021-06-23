@@ -10,4 +10,9 @@
         android:name="com.cegep.sportify_admin.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/dashboard"
+        android:name="com.cegep.sportify_admin.dashboard"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
 </navigation>
