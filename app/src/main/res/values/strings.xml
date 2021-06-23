@@ -40,4 +40,5 @@
     <string name="error_empty_equipment_sport">Please enter a valid sport</string>
     <string name="clothing">Clothing</string>
     <string name="equipments">Equipments</string>
+    <string name="out_of_stock">Out of Stock</string>
 </resources>

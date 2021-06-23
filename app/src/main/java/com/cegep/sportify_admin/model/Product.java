@@ -197,4 +197,8 @@ public class Product {
 
         return true;
     }
+
+    public boolean isOutOfStock() {
+        return (getxSmallSize() + getSmallSize() + getMediumSize() + getLargeSize() + getxLargeSize()) == 0;
+    }
 }

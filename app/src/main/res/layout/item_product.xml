@@ -22,6 +22,21 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
 
+        <TextView
+            android:id="@+id/out_of_stock_overlay"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#cccbcbcb"
+            android:gravity="center"
+            android:text="@string/out_of_stock"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/product_image"
+            app:layout_constraintEnd_toEndOf="@id/product_image"
+            app:layout_constraintStart_toStartOf="@id/product_image"
+            app:layout_constraintTop_toTopOf="@id/product_image"
+            tools:visibility="visible" />
+
         <ImageView
             android:id="@+id/sale_bg"
             android:layout_width="wrap_content"
