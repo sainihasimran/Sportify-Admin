@@ -35,11 +35,19 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bind(Product product, Context context) {
-        if (product.getImages() != null && !product.getImages().isEmpty()) {
-            Glide.with(context)
-                    .load(product.getImages().get(0))
-                    .centerCrop()
-                    .into(productImageView);
+        if (!product.isOutOfStock()) {
+            if (product.getImages() != null && !product.getImages().isEmpty()) {
+                Glide.with(context)
+                        .load(product.getImages().get(0))
+                        .centerCrop()
+                        .into(productImageView);
+            } else {
+                Glide.with(context)
+                        .load(R.drawable.no_image_bg)
+                        .into(productImageView);
+            }
+        } else {
+            productImageView.setImageDrawable(null);
         }
 
         productNameTextView.setText(product.getProductName());
@@ -53,7 +61,7 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
             saleTextView.setVisibility(View.GONE);
             saleBgImageView.setVisibility(View.GONE);
         }
-        
+
         if (product.isOutOfStock()) {
             outOfStockOverlay.setVisibility(View.VISIBLE);
         } else {
