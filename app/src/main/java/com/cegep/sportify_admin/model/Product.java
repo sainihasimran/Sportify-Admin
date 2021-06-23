@@ -7,7 +7,7 @@ import com.cegep.sportify_admin.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddProductRequest {
+public class Product {
 
     private String productName;
 

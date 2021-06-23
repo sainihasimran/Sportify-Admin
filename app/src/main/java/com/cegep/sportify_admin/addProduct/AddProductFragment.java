@@ -26,7 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.cegep.sportify_admin.R;
-import com.cegep.sportify_admin.model.AddProductRequest;
+import com.cegep.sportify_admin.model.Product;
 import com.esafirm.imagepicker.features.ImagePickerConfig;
 import com.esafirm.imagepicker.features.ImagePickerLauncher;
 import com.esafirm.imagepicker.features.ImagePickerLauncherKt;
@@ -75,7 +75,7 @@ public class AddProductFragment extends Fragment {
 
     private ImagePickerLauncher imagepickerLauncher = null;
     private List<Image> images = new ArrayList<>();
-    private final AddProductRequest addProductRequest = new AddProductRequest();
+    private final Product product = new Product();
 
     @Nullable
     @Override
@@ -150,7 +150,7 @@ public class AddProductFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addProductRequest.setProductName(s.toString());
+                product.setProductName(s.toString());
             }
 
             @Override
@@ -170,7 +170,7 @@ public class AddProductFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addProductRequest.setProductPrice(s.toString());
+                product.setProductPrice(s.toString());
             }
 
             @Override
@@ -191,9 +191,9 @@ public class AddProductFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s)) {
-                    addProductRequest.setSale(0);
+                    product.setSale(0);
                 } else {
-                    addProductRequest.setSale(Integer.parseInt(s.toString()));
+                    product.setSale(Integer.parseInt(s.toString()));
                 }
             }
 
@@ -219,7 +219,7 @@ public class AddProductFragment extends Fragment {
 
         categoryTextView.setOnItemClickListener((parent, view1, position, id) -> {
             String category = categories.get(position);
-            addProductRequest.setCategory(category);
+            product.setCategory(category);
         });
     }
 
@@ -235,7 +235,7 @@ public class AddProductFragment extends Fragment {
 
         subCategoryTextView.setOnItemClickListener((parent, view1, position, id) -> {
             String subCategory = subCategories.get(position);
-            addProductRequest.setSubCategory(subCategory);
+            product.setSubCategory(subCategory);
         });
     }
 
@@ -249,7 +249,7 @@ public class AddProductFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addProductRequest.setDescription(s.toString());
+                product.setDescription(s.toString());
             }
 
             @Override
@@ -270,9 +270,9 @@ public class AddProductFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s)) {
-                    addProductRequest.setxSmallSize(0);
+                    product.setxSmallSize(0);
                 } else {
-                    addProductRequest.setxSmallSize(Integer.parseInt(s.toString()));
+                    product.setxSmallSize(Integer.parseInt(s.toString()));
                 }
             }
 
@@ -292,9 +292,9 @@ public class AddProductFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s)) {
-                    addProductRequest.setSmallSize(0);
+                    product.setSmallSize(0);
                 } else {
-                    addProductRequest.setSmallSize(Integer.parseInt(s.toString()));
+                    product.setSmallSize(Integer.parseInt(s.toString()));
                 }
             }
 
@@ -314,9 +314,9 @@ public class AddProductFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s)) {
-                    addProductRequest.setMediumSize(0);
+                    product.setMediumSize(0);
                 } else {
-                    addProductRequest.setMediumSize(Integer.parseInt(s.toString()));
+                    product.setMediumSize(Integer.parseInt(s.toString()));
                 }
             }
 
@@ -336,9 +336,9 @@ public class AddProductFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s)) {
-                    addProductRequest.setLargeSize(0);
+                    product.setLargeSize(0);
                 } else {
-                    addProductRequest.setLargeSize(Integer.parseInt(s.toString()));
+                    product.setLargeSize(Integer.parseInt(s.toString()));
                 }
             }
 
@@ -358,9 +358,9 @@ public class AddProductFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s)) {
-                    addProductRequest.setxLargeSize(0);
+                    product.setxLargeSize(0);
                 } else {
-                    addProductRequest.setxLargeSize(Integer.parseInt(s.toString()));
+                    product.setxLargeSize(Integer.parseInt(s.toString()));
                 }
             }
 
@@ -388,10 +388,10 @@ public class AddProductFragment extends Fragment {
                 try {
                     int color = Color.parseColor(hexColor);
                     chip.setChipBackgroundColor(ColorStateList.valueOf(color));
-                    if (!addProductRequest.hasColor(hexColor)) {
+                    if (!product.hasColor(hexColor)) {
                         int numOfChildren = chipGroup.getChildCount();
                         chipGroup.addView(chip, numOfChildren - 1);
-                        addProductRequest.addColor(hexColor);
+                        product.addColor(hexColor);
                     } else {
                         Toast.makeText(requireContext(), "Color already added", Toast.LENGTH_SHORT).show();
                     }
@@ -413,7 +413,7 @@ public class AddProductFragment extends Fragment {
     private void setupAddButtonClick(View view) {
         addProductButton = view.findViewById(R.id.add_product_button);
         addProductButton.setOnClickListener(v -> {
-            if (addProductRequest.isValid(requireContext())) {
+            if (product.isValid(requireContext())) {
                 if (images.isEmpty()) {
                     addProduct();
                 } else {
@@ -469,7 +469,7 @@ public class AddProductFragment extends Fragment {
                 imageUrls.add(object.toString());
             }
 
-            addProductRequest.setImages(imageUrls);
+            product.setImages(imageUrls);
             addProduct();
         }).addOnFailureListener(e -> Toast.makeText(requireContext(), "Failed to upload images", Toast.LENGTH_SHORT).show());
     }
@@ -479,8 +479,8 @@ public class AddProductFragment extends Fragment {
         DatabaseReference productsReference = databaseReference.child("Brand").child("Products");
         String productId = productsReference.push().getKey();
         DatabaseReference productReference = productsReference.child(productId);
-        addProductRequest.setCreatedAt(System.currentTimeMillis());
-        productReference.setValue(addProductRequest);
+        product.setCreatedAt(System.currentTimeMillis());
+        productReference.setValue(product);
     }
 
     private void setChooseImageVisibility(int visibility) {
