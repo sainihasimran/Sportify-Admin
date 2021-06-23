@@ -7,7 +7,7 @@ import com.cegep.sportify_admin.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddEquipmentRequest {
+public class Equipment {
 
     private String equipmentName;
 
@@ -119,5 +119,9 @@ public class AddEquipmentRequest {
         }
 
         return true;
+    }
+
+    public boolean isOutOfStock() {
+        return getStock() < 0;
     }
 }

@@ -48,6 +48,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void showEquipmentsFragment() {
-
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, new EquipmentsListFragment())
+                .commit();
     }
 }

@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.addProduct.ImageAdapter;
-import com.cegep.sportify_admin.model.AddEquipmentRequest;
+import com.cegep.sportify_admin.model.Equipment;
 import com.esafirm.imagepicker.features.ImagePickerConfig;
 import com.esafirm.imagepicker.features.ImagePickerLauncher;
 import com.esafirm.imagepicker.features.ImagePickerLauncherKt;
@@ -66,7 +66,7 @@ public class AddEquipmentFragment extends Fragment {
 
     private List<Image> images = new ArrayList<>();
 
-    private final AddEquipmentRequest addEquipmentRequest = new AddEquipmentRequest();
+    private final Equipment equipment = new Equipment();
 
     @Nullable
     @Override
@@ -138,7 +138,7 @@ public class AddEquipmentFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addEquipmentRequest.setEquipmentName(s.toString());
+                equipment.setEquipmentName(s.toString());
             }
 
             @Override
@@ -158,7 +158,7 @@ public class AddEquipmentFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addEquipmentRequest.setEquipmentPrice(s.toString());
+                equipment.setEquipmentPrice(s.toString());
             }
 
             @Override
@@ -179,9 +179,9 @@ public class AddEquipmentFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s)) {
-                    addEquipmentRequest.setSale(0);
+                    equipment.setSale(0);
                 } else {
-                    addEquipmentRequest.setSale(Integer.parseInt(s.toString()));
+                    equipment.setSale(Integer.parseInt(s.toString()));
                 }
             }
 
@@ -202,7 +202,7 @@ public class AddEquipmentFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addEquipmentRequest.setSport(s.toString());
+                equipment.setSport(s.toString());
             }
 
             @Override
@@ -222,7 +222,7 @@ public class AddEquipmentFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addEquipmentRequest.setDescription(s.toString());
+                equipment.setDescription(s.toString());
             }
 
             @Override
@@ -243,9 +243,9 @@ public class AddEquipmentFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s)) {
-                    addEquipmentRequest.setStock(0);
+                    equipment.setStock(0);
                 } else {
-                    addEquipmentRequest.setStock(Integer.parseInt(s.toString()));
+                    equipment.setStock(Integer.parseInt(s.toString()));
                 }
             }
 
@@ -259,7 +259,7 @@ public class AddEquipmentFragment extends Fragment {
     private void setupAddButtonClick(View view) {
         addEquipmentButton = view.findViewById(R.id.add_product_button);
         addEquipmentButton.setOnClickListener(v -> {
-            if (addEquipmentRequest.isValid(requireContext())) {
+            if (equipment.isValid(requireContext())) {
                 if (images.isEmpty()) {
                     addEquipment();
                 } else {
@@ -315,7 +315,7 @@ public class AddEquipmentFragment extends Fragment {
                 imageUrls.add(object.toString());
             }
 
-            addEquipmentRequest.setImages(imageUrls);
+            equipment.setImages(imageUrls);
             addEquipment();
         }).addOnFailureListener(e -> Toast.makeText(requireContext(), "Failed to upload images", Toast.LENGTH_SHORT).show());
     }
@@ -325,8 +325,8 @@ public class AddEquipmentFragment extends Fragment {
         DatabaseReference productsReference = databaseReference.child("Brand").child("Equipments");
         String equipmentId = productsReference.push().getKey();
         DatabaseReference productReference = productsReference.child(equipmentId);
-        addEquipmentRequest.setCreatedAt(System.currentTimeMillis());
-        productReference.setValue(addEquipmentRequest);
+        equipment.setCreatedAt(System.currentTimeMillis());
+        productReference.setValue(equipment);
     }
 
     private void setChooseImageVisibility(int visibility) {

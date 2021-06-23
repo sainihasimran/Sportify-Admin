@@ -11,12 +11,12 @@ import com.cegep.sportify_admin.model.Product;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-public class ProductAdapter extends FirebaseRecyclerAdapter<Product, ProductViewHolder> {
+public class ProductsAdapter extends FirebaseRecyclerAdapter<Product, ProductViewHolder> {
 
     private final Context context;
     private final ItemClickListener<Product> itemClickListener;
 
-    public ProductAdapter(@NonNull FirebaseRecyclerOptions<Product> options, Context context, ItemClickListener<Product> itemClickListener) {
+    public ProductsAdapter(@NonNull FirebaseRecyclerOptions<Product> options, Context context, ItemClickListener<Product> itemClickListener) {
         super(options);
         this.context = context;
         this.itemClickListener = itemClickListener;

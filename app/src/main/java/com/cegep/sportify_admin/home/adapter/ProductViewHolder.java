@@ -11,7 +11,7 @@ import com.cegep.sportify_admin.ItemClickListener;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.model.Product;
 
-class ProductViewHolder extends RecyclerView.ViewHolder implements ItemClickListener<Product> {
+class ProductViewHolder extends RecyclerView.ViewHolder {
 
     private final ImageView productImageView;
     private final TextView productNameTextView;
@@ -73,10 +73,5 @@ class ProductViewHolder extends RecyclerView.ViewHolder implements ItemClickList
         } else {
             outOfStockOverlay.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onClick(Product obj) {
-        
     }
 }
