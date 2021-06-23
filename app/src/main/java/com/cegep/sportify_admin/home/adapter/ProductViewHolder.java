@@ -16,12 +16,18 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
     private final TextView productNameTextView;
     private final TextView productPriceTextView;
 
+    private final ImageView saleBgImageView;
+    private final TextView saleTextView;
+
     public ProductViewHolder(@NonNull View itemView) {
         super(itemView);
 
         productImageView = itemView.findViewById(R.id.product_image);
         productNameTextView = itemView.findViewById(R.id.product_name);
         productPriceTextView = itemView.findViewById(R.id.product_price);
+
+        saleBgImageView = itemView.findViewById(R.id.sale_bg);
+        saleTextView = itemView.findViewById(R.id.sale_text);
     }
 
     void bind(Product product, Context context) {
@@ -34,5 +40,14 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
 
         productNameTextView.setText(product.getProductName());
         productPriceTextView.setText("$" + product.getPrice());
+        
+        if (product.getSale() > 0) {
+            saleTextView.setText(product.getSale() + "%\noff");
+            saleTextView.setVisibility(View.VISIBLE);
+            saleBgImageView.setVisibility(View.VISIBLE);
+        } else {
+            saleTextView.setVisibility(View.GONE);
+            saleBgImageView.setVisibility(View.GONE);
+        }
     }
 }
