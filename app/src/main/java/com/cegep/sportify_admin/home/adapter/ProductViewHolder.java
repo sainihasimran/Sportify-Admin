@@ -7,10 +7,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.cegep.sportify_admin.ItemClickListener;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.model.Product;
 
-class ProductViewHolder extends RecyclerView.ViewHolder {
+class ProductViewHolder extends RecyclerView.ViewHolder implements ItemClickListener<Product> {
 
     private final ImageView productImageView;
     private final TextView productNameTextView;
@@ -21,8 +22,12 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
 
     private final TextView outOfStockOverlay;
 
-    public ProductViewHolder(@NonNull View itemView) {
+    private Product product;
+
+    public ProductViewHolder(@NonNull View itemView, ItemClickListener<Product> itemClickListener) {
         super(itemView);
+
+        itemView.setOnClickListener(v -> itemClickListener.onClick(product));
 
         productImageView = itemView.findViewById(R.id.product_image);
         productNameTextView = itemView.findViewById(R.id.product_name);
@@ -35,6 +40,7 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bind(Product product, Context context) {
+        this.product = product;
         if (!product.isOutOfStock()) {
             if (product.getImages() != null && !product.getImages().isEmpty()) {
                 Glide.with(context)
@@ -67,5 +73,10 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
         } else {
             outOfStockOverlay.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onClick(Product obj) {
+        
     }
 }
