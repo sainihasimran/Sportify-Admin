@@ -28,6 +28,7 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
         if (product.getImages() != null && !product.getImages().isEmpty()) {
             Glide.with(context)
                     .load(product.getImages().get(0))
+                    .centerCrop()
                     .into(productImageView);
         }
 

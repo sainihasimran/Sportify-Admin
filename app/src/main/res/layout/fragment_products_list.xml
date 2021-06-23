@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,7 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginEnd="@dimen/size_l"
-        android:layout_marginRight="@dimen/size_l" />
+        android:layout_marginRight="@dimen/size_l"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/size_l"
+        tools:listitem="@layout/item_product" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/add_product_button"
@@ -18,6 +22,7 @@
         android:layout_margin="@dimen/size_l"
         android:text="@string/add_product"
         android:textColor="@color/white"
+        app:backgroundTint="@color/black"
         app:icon="@drawable/ic_add"
         app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

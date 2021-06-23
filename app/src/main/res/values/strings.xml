@@ -38,4 +38,6 @@
     <string name="error_empty_equipment_name">Please enter equipment name</string>
     <string name="error_empty_equipment_price">Please enter a valid price</string>
     <string name="error_empty_equipment_sport">Please enter a valid sport</string>
+    <string name="clothing">Clothing</string>
+    <string name="equipments">Equipments</string>
 </resources>
