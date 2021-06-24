@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -95,6 +96,17 @@ public class EquipmentsListFragment extends Fragment implements ItemClickListene
         for (Equipment equipment : equipments) {
             if (equipmentFilter.getSportFilter().equals("All") || equipmentFilter.getSportFilter().equalsIgnoreCase(equipment.getSport())) {
                 filteredEquipments.add(equipment);
+            }
+        }
+
+        if (equipmentFilter.getOutOfStock() != null) {
+            boolean outOfStock = equipmentFilter.getOutOfStock();
+            Iterator<Equipment> iterator = filteredEquipments.iterator();
+            while (iterator.hasNext()) {
+                Equipment equipment = iterator.next();
+                if (equipment.isOutOfStock() != outOfStock) {
+                    iterator.remove();
+                }
             }
         }
 

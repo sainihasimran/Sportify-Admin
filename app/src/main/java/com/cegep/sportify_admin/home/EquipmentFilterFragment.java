@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ public class EquipmentFilterFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         setupSportChooser(view);
+        setupOutOfStockChooser(view);
         setupApplyButtonClick(view);
     }
 
@@ -70,6 +72,19 @@ public class EquipmentFilterFragment extends BottomSheetDialogFragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+    }
+
+    private void setupOutOfStockChooser(View view) {
+        RadioGroup radioGroup = view.findViewById(R.id.out_of_stock_chooser);
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.out_of_stock_none_button) {
+                equipmentFilter.setOutOfStock(null);
+            } else if (checkedId == R.id.out_of_stock_yes_button) {
+                equipmentFilter.setOutOfStock(true);
+            } else if (checkedId == R.id.out_of_stock_no_button) {
+                equipmentFilter.setOutOfStock(false);
             }
         });
     }
