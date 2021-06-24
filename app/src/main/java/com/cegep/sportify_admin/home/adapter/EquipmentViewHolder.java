@@ -59,7 +59,7 @@ class EquipmentViewHolder extends RecyclerView.ViewHolder {
         equipmentNameTextView.setText(equipment.getEquipmentName());
         equipmentPriceTextView.setText("$" + equipment.getPrice());
 
-        if (equipment.getSale() > 0) {
+        if (equipment.getSale() > 0 && !equipment.isOutOfStock()) {
             saleTextView.setText(equipment.getSale() + "%\noff");
             saleTextView.setVisibility(View.VISIBLE);
             saleBgImageView.setVisibility(View.VISIBLE);
