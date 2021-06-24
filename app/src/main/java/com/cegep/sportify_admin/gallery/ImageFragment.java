@@ -1,4 +1,4 @@
-package com.cegep.sportify_admin.addProduct;
+package com.cegep.sportify_admin.gallery;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

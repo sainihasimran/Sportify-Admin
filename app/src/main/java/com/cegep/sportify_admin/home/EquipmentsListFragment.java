@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.cegep.sportify_admin.ItemClickListener;
 import com.cegep.sportify_admin.R;
-import com.cegep.sportify_admin.addEquipment.AddEquipmentActivity;
+import com.cegep.sportify_admin.equipment.addEquipment.AddEquipmentActivity;
+import com.cegep.sportify_admin.equipment.editEquipment.EditEquipmentActivity;
 import com.cegep.sportify_admin.home.adapter.EquipmentsAdapter;
 import com.cegep.sportify_admin.model.Equipment;
 import com.cegep.sportify_admin.model.EquipmentFilter;
+import com.cegep.sportify_admin.product.editProduct.EditProductActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +30,8 @@ import java.util.List;
 import java.util.Set;
 
 public class EquipmentsListFragment extends Fragment implements ItemClickListener<Equipment> {
+
+    public static Equipment selectedEquipment = null;
 
     private View emptyView;
 
@@ -89,6 +93,9 @@ public class EquipmentsListFragment extends Fragment implements ItemClickListene
 
     @Override
     public void onClick(Equipment obj) {
+        selectedEquipment = obj;
+        Intent intent = new Intent(requireContext(), EditEquipmentActivity.class);
+        requireActivity().startActivity(intent);
     }
 
     private void showEquipmentList() {

@@ -12,10 +12,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.cegep.sportify_admin.ItemClickListener;
 import com.cegep.sportify_admin.R;
-import com.cegep.sportify_admin.addProduct.AddProductActivity;
 import com.cegep.sportify_admin.home.adapter.ProductsAdapter;
 import com.cegep.sportify_admin.model.Product;
 import com.cegep.sportify_admin.model.ProductFilter;
+import com.cegep.sportify_admin.product.addProduct.AddProductActivity;
+import com.cegep.sportify_admin.product.editProduct.EditProductActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +29,8 @@ import java.util.List;
 import java.util.Set;
 
 public class ProductsListFragment extends Fragment implements ItemClickListener<Product> {
+
+    public static Product selectedProduct = null;
 
     private View emptyView;
 
@@ -89,6 +92,9 @@ public class ProductsListFragment extends Fragment implements ItemClickListener<
 
     @Override
     public void onClick(Product obj) {
+        selectedProduct = obj;
+        Intent intent = new Intent(requireContext(), EditProductActivity.class);
+        requireActivity().startActivity(intent);
     }
 
     private void showProductList() {

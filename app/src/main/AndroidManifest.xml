@@ -21,8 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".addProduct.AddProductActivity" />
-        <activity android:name=".addEquipment.AddEquipmentActivity" />
+        <activity android:name=".product.addProduct.AddProductActivity" />
+        <activity android:name=".equipment.addEquipment.AddEquipmentActivity" />
+        <activity android:name=".product.editProduct.EditProductActivity" />
+        <activity android:name=".equipment.editEquipment.EditEquipmentActivity" />
     </application>
 
 </manifest>

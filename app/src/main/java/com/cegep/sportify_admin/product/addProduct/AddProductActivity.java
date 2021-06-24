@@ -1,16 +1,16 @@
-package com.cegep.sportify_admin.addEquipment;
+package com.cegep.sportify_admin.product.addProduct;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.cegep.sportify_admin.R;
 
-public class AddEquipmentActivity extends AppCompatActivity {
+public class AddProductActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_equipment);
+        setContentView(R.layout.activity_add_product);
 
         setupToolbar();
     }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".addProduct.AddProductActivity">
+    tools:context=".product.addProduct.AddProductActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/add_product_fragment"
-        android:name="com.cegep.sportify_admin.addProduct.AddProductFragment"
+        android:name="com.cegep.sportify_admin.product.addProduct.AddProductFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

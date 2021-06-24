@@ -1,4 +1,4 @@
-package com.cegep.sportify_admin.addProduct;
+package com.cegep.sportify_admin.product.addProduct;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.cegep.sportify_admin.Constants;
 import com.cegep.sportify_admin.R;
+import com.cegep.sportify_admin.gallery.ImageAdapter;
 import com.cegep.sportify_admin.model.Product;
 import com.esafirm.imagepicker.features.ImagePickerConfig;
 import com.esafirm.imagepicker.features.ImagePickerLauncher;

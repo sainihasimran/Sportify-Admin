@@ -1,4 +1,4 @@
-package com.cegep.sportify_admin.addEquipment;
+package com.cegep.sportify_admin.equipment.addEquipment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -19,7 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.cegep.sportify_admin.R;
-import com.cegep.sportify_admin.addProduct.ImageAdapter;
+import com.cegep.sportify_admin.gallery.ImageAdapter;
 import com.cegep.sportify_admin.model.Equipment;
 import com.esafirm.imagepicker.features.ImagePickerConfig;
 import com.esafirm.imagepicker.features.ImagePickerLauncher;
@@ -28,7 +28,6 @@ import com.esafirm.imagepicker.features.ImagePickerMode;
 import com.esafirm.imagepicker.features.ImagePickerSavePath;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
