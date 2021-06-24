@@ -16,12 +16,10 @@ import com.cegep.sportify_admin.addEquipment.AddEquipmentActivity;
 import com.cegep.sportify_admin.home.adapter.EquipmentsAdapter;
 import com.cegep.sportify_admin.model.Equipment;
 import com.cegep.sportify_admin.model.EquipmentFilter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,6 +27,8 @@ import java.util.List;
 import java.util.Set;
 
 public class EquipmentsListFragment extends Fragment implements ItemClickListener<Equipment> {
+
+    private View emptyView;
 
     private EquipmentFilter equipmentFilter = new EquipmentFilter();
 
@@ -64,6 +64,8 @@ public class EquipmentsListFragment extends Fragment implements ItemClickListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        emptyView = view.findViewById(R.id.empty_view);
+
         setupRecyclerView(view);
         // TODO: 2021-06-23 Add equipment id
         DatabaseReference equipmentsReference = FirebaseDatabase.getInstance().getReference("Brand").child("Equipments");
@@ -95,6 +97,8 @@ public class EquipmentsListFragment extends Fragment implements ItemClickListene
                 filteredEquipments.add(equipment);
             }
         }
+
+        emptyView.setVisibility(filteredEquipments.isEmpty() ? View.VISIBLE : View.GONE);
 
         equipmentsAdapter.update(filteredEquipments);
     }
