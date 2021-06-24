@@ -15,16 +15,42 @@ import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.addProduct.AddProductActivity;
 import com.cegep.sportify_admin.home.adapter.ProductsAdapter;
 import com.cegep.sportify_admin.model.Product;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.cegep.sportify_admin.model.ProductFilter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ProductsListFragment extends Fragment implements ItemClickListener<Product> {
 
-    private RecyclerView recyclerView;
+    private ProductFilter productFilter = new ProductFilter();
 
-    private DatabaseReference productsReference;
+    private List<Product> products = new ArrayList<>();
+
+    private final ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            List<Product> products = new ArrayList<>();
+            for (DataSnapshot productDataSnapshot : snapshot.getChildren()) {
+                Product product = productDataSnapshot.getValue(Product.class);
+                products.add(product);
+            }
+
+            ProductsListFragment.this.products = products;
+            showProductList();
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+    private ProductsAdapter productsAdapter;
 
     @Nullable
     @Override
@@ -36,14 +62,10 @@ public class ProductsListFragment extends Fragment implements ItemClickListener<
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-
-        recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        setupRecyclerView(view);
         // TODO: 2021-06-23 Add product id
-        productsReference = FirebaseDatabase.getInstance().getReference("Brand").child("Products");
-
-        attachRecyclerAdapter();
+        DatabaseReference productsReference = FirebaseDatabase.getInstance().getReference("Brand").child("Products");
+        productsReference.addValueEventListener(valueEventListener);
 
         view.findViewById(R.id.add_product_button).setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), AddProductActivity.class);
@@ -51,21 +73,36 @@ public class ProductsListFragment extends Fragment implements ItemClickListener<
         });
     }
 
-    private void attachRecyclerAdapter() {
-        FirebaseRecyclerOptions<Product> options = new FirebaseRecyclerOptions.Builder<Product>()
-                .setQuery(getQuery(productsReference), Product.class)
-                .setLifecycleOwner(this)
-                .build();
+    private void setupRecyclerView(View view) {
+        productsAdapter = new ProductsAdapter(requireContext(), this);
 
-        ProductsAdapter productsAdapter = new ProductsAdapter(options, requireContext(), this);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         recyclerView.setAdapter(productsAdapter);
-    }
-
-    private Query getQuery(DatabaseReference databaseReference) {
-        return databaseReference.orderByPriority();
     }
 
     @Override
     public void onClick(Product obj) {
+    }
+
+    private void showProductList() {
+        Set<Product> filteredProducts = new HashSet<>();
+        for (Product product : products) {
+            String filterCategory = productFilter.getCategoryFilter();
+            String filterSubCategory = productFilter.getSubCategoryFilter();
+            if (filterCategory.equals("All") || filterCategory.equals(product.getCategory())) {
+                if (filterSubCategory.equals("All") || filterSubCategory.equals(product.getSubCategory())) {
+                    filteredProducts.add(product);
+                }
+            }
+        }
+
+        productsAdapter.update(filteredProducts);
+    }
+
+    public void handleFilters(ProductFilter productFilter) {
+        this.productFilter = productFilter;
+        showProductList();
     }
 }

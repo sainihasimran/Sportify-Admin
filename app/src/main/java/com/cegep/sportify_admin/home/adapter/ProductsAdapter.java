@@ -5,19 +5,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import com.cegep.sportify_admin.ItemClickListener;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.model.Product;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class ProductsAdapter extends FirebaseRecyclerAdapter<Product, ProductViewHolder> {
+public class ProductsAdapter extends RecyclerView.Adapter<ProductViewHolder> {
 
     private final Context context;
     private final ItemClickListener<Product> itemClickListener;
 
-    public ProductsAdapter(@NonNull FirebaseRecyclerOptions<Product> options, Context context, ItemClickListener<Product> itemClickListener) {
-        super(options);
+    private final List<Product> products = new ArrayList<>();
+
+    public ProductsAdapter(Context context, ItemClickListener<Product> itemClickListener) {
         this.context = context;
         this.itemClickListener = itemClickListener;
     }
@@ -31,7 +35,18 @@ public class ProductsAdapter extends FirebaseRecyclerAdapter<Product, ProductVie
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Product model) {
-        holder.bind(model, context);
+    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+        holder.bind(products.get(position), context);
+    }
+
+    @Override
+    public int getItemCount() {
+        return products.size();
+    }
+
+    public void update(Collection<Product> products) {
+        this.products.clear();
+        this.products.addAll(products);
+        notifyDataSetChanged();
     }
 }

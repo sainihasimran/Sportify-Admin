@@ -41,4 +41,6 @@
     <string name="clothing">Clothing</string>
     <string name="equipments">Equipments</string>
     <string name="out_of_stock">Out of Stock</string>
+    <string name="filters">Filters</string>
+    <string name="apply">Apply</string>
 </resources>

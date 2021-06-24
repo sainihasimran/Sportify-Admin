@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+import com.cegep.sportify_admin.Constants;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.model.Product;
 import com.esafirm.imagepicker.features.ImagePickerConfig;
@@ -48,6 +49,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
@@ -205,13 +207,7 @@ public class AddProductFragment extends Fragment {
     }
 
     private void setupCategories(View view) {
-        List<String> categories = new ArrayList<>();
-        categories.add("Footwear");
-        categories.add("Tops");
-        categories.add("Bottoms");
-        categories.add("Swimwear");
-        categories.add("Outerwear");
-        categories.add("Headwear");
+        List<String> categories = Arrays.asList(Constants.CATEGORIES);
 
         ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, categories);
         AutoCompleteTextView categoryTextView = view.findViewById(R.id.category_textView);
@@ -224,9 +220,7 @@ public class AddProductFragment extends Fragment {
     }
 
     private void setupSubCategories(View view) {
-        List<String> subCategories = new ArrayList<>();
-        subCategories.add("Men's");
-        subCategories.add("Womens'");
+        List<String> subCategories = Arrays.asList(Constants.SUB_CATEGORIES);
 
         ArrayAdapter<String> subCategoriesAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1,
                                                                        subCategories);

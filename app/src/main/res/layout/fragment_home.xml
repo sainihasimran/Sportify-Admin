@@ -11,6 +11,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/app_name"
@@ -30,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_home" />
+        app:labelVisibilityMode="selected"
+        app:menu="@menu/bottom_menu_home" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
