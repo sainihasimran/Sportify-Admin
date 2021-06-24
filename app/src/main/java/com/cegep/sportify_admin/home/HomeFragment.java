@@ -1,5 +1,6 @@
 package com.cegep.sportify_admin.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.model.EquipmentFilter;
 import com.cegep.sportify_admin.model.ProductFilter;
+import com.cegep.sportify_admin.settings.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -58,6 +60,10 @@ public class HomeFragment extends Fragment implements ProductFilterListener, Equ
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_filter) {
                 showFiltersFragment();
+                return true;
+            } else if (item.getItemId() == R.id.action_profile) {
+                Intent intent = new Intent(requireContext(), ProfileActivity.class);
+                startActivity(intent);
                 return true;
             }
 
