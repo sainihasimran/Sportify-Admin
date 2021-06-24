@@ -1,15 +1,9 @@
 package com.cegep.sportify_admin;
-import android.content.Intent;
-import android.os.Bundle;
 
+import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,8 +26,6 @@ public class LoginFragment extends Fragment {
     EditText admin_email, admin_pass;
     Button signin_btn;
     TextView joinus;
-    //NavController navController;
-
     public LoginFragment() {
     }
 
@@ -56,7 +48,6 @@ public class LoginFragment extends Fragment {
         admin_pass = view.findViewById(R.id.password_et);
         signin_btn = view.findViewById(R.id.Signin);
         joinus = view.findViewById(R.id.signup);
-        //navController = Navigation.findNavController(getActivity(),R.id.signin_host);
 
         signin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
