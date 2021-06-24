@@ -475,6 +475,7 @@ public class AddProductFragment extends Fragment {
         DatabaseReference productReference = productsReference.child(productId);
         product.setCreatedAt(System.currentTimeMillis());
         productReference.setValue(product);
+        requireActivity().finish();
     }
 
     private void setChooseImageVisibility(int visibility) {

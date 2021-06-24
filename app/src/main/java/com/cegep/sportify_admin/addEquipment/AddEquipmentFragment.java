@@ -356,6 +356,7 @@ public class AddEquipmentFragment extends Fragment {
                 if (updateSports) {
                     sportsReference.setValue(sports);
                 }
+                requireActivity().finish();
             }
         });
     }
