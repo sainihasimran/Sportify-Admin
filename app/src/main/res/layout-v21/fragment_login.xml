@@ -137,7 +137,6 @@
         android:layout_height="wrap_content"
         android:text="Join Us"
         android:textColor="#000000"
-        android:onClick="selectFragment"
         android:textColorHint="@color/black"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
