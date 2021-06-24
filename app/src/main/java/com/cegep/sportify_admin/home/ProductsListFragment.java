@@ -28,6 +28,8 @@ import java.util.Set;
 
 public class ProductsListFragment extends Fragment implements ItemClickListener<Product> {
 
+    private View emptyView;
+
     private ProductFilter productFilter = new ProductFilter();
 
     private List<Product> products = new ArrayList<>();
@@ -61,6 +63,8 @@ public class ProductsListFragment extends Fragment implements ItemClickListener<
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        emptyView = view.findViewById(R.id.empty_view);
 
         setupRecyclerView(view);
         // TODO: 2021-06-23 Add product id
@@ -97,6 +101,8 @@ public class ProductsListFragment extends Fragment implements ItemClickListener<
                 }
             }
         }
+
+        emptyView.setVisibility(filteredProducts.isEmpty() ? View.VISIBLE : View.GONE);
 
         productsAdapter.update(filteredProducts);
     }
