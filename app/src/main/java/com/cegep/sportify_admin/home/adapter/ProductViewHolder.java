@@ -41,19 +41,20 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
 
     void bind(Product product, Context context) {
         this.product = product;
-        if (!product.isOutOfStock()) {
-            if (product.getImages() != null && !product.getImages().isEmpty()) {
-                Glide.with(context)
-                        .load(product.getImages().get(0))
-                        .centerCrop()
-                        .into(productImageView);
-            } else {
+
+        if (product.getImages() != null && !product.getImages().isEmpty()) {
+            Glide.with(context)
+                    .load(product.getImages().get(0))
+                    .centerCrop()
+                    .into(productImageView);
+        } else {
+            if (!product.isOutOfStock()) {
                 Glide.with(context)
                         .load(R.drawable.no_image_bg)
                         .into(productImageView);
+            } else {
+                productImageView.setImageDrawable(null);
             }
-        } else {
-            productImageView.setImageDrawable(null);
         }
 
         productNameTextView.setText(product.getProductName());

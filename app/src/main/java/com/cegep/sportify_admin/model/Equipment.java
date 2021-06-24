@@ -122,6 +122,6 @@ public class Equipment {
     }
 
     public boolean isOutOfStock() {
-        return getStock() < 0;
+        return getStock() <= 0;
     }
 }

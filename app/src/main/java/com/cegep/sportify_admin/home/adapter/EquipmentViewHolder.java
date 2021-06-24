@@ -41,25 +41,31 @@ class EquipmentViewHolder extends RecyclerView.ViewHolder {
 
     void bind(Equipment equipment, Context context) {
         this.equipment = equipment;
-        if (!equipment.isOutOfStock()) {
-            if (equipment.getImages() != null && !equipment.getImages().isEmpty()) {
-                Glide.with(context)
-                        .load(equipment.getImages().get(0))
-                        .centerCrop()
-                        .into(equipmentImageView);
-            } else {
+//        if (!equipment.isOutOfStock()) {
+//
+//        } else {
+//            equipmentImageView.setImageDrawable(null);
+//        }
+        if (equipment.getImages() != null && !equipment.getImages().isEmpty()) {
+            Glide.with(context)
+                    .load(equipment.getImages().get(0))
+                    .centerCrop()
+                    .into(equipmentImageView);
+        } else {
+            if (!equipment.isOutOfStock()) {
                 Glide.with(context)
                         .load(R.drawable.no_image_bg)
                         .into(equipmentImageView);
+            } else {
+                equipmentImageView.setImageDrawable(null);
             }
-        } else {
-            equipmentImageView.setImageDrawable(null);
         }
 
         equipmentNameTextView.setText(equipment.getEquipmentName());
         equipmentPriceTextView.setText("$" + equipment.getPrice());
 
-        if (equipment.getSale() > 0 && !equipment.isOutOfStock()) {
+        boolean isOutOfStock = equipment.isOutOfStock();
+        if (equipment.getSale() > 0 && !isOutOfStock) {
             saleTextView.setText(equipment.getSale() + "%\noff");
             saleTextView.setVisibility(View.VISIBLE);
             saleBgImageView.setVisibility(View.VISIBLE);
@@ -68,7 +74,7 @@ class EquipmentViewHolder extends RecyclerView.ViewHolder {
             saleBgImageView.setVisibility(View.GONE);
         }
 
-        if (equipment.isOutOfStock()) {
+        if (isOutOfStock) {
             outOfStockOverlay.setVisibility(View.VISIBLE);
         } else {
             outOfStockOverlay.setVisibility(View.GONE);
