@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -98,6 +99,17 @@ public class ProductsListFragment extends Fragment implements ItemClickListener<
             if (filterCategory.equals("All") || filterCategory.equals(product.getCategory())) {
                 if (filterSubCategory.equals("All") || filterSubCategory.equals(product.getSubCategory())) {
                     filteredProducts.add(product);
+                }
+            }
+        }
+
+        if (productFilter.getOutOfStock() != null) {
+            boolean outOfStock = productFilter.getOutOfStock();
+            Iterator<Product> iterator = filteredProducts.iterator();
+            while (iterator.hasNext()) {
+                Product product = iterator.next();
+                if (product.isOutOfStock() != outOfStock) {
+                    iterator.remove();
                 }
             }
         }

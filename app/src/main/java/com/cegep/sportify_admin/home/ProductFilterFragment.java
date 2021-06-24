@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ public class ProductFilterFragment extends BottomSheetDialogFragment {
 
         setupCategoriesSpinner(view);
         setupSubCategoriesSpinner(view);
+        setupOutOfStockChooser(view);
         setupApplyButtonClick(view);
     }
 
@@ -75,6 +77,19 @@ public class ProductFilterFragment extends BottomSheetDialogFragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+    }
+
+    private void setupOutOfStockChooser(View view) {
+        RadioGroup radioGroup = view.findViewById(R.id.out_of_stock_chooser);
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.out_of_stock_none_button) {
+                productFilter.setOutOfStock(null);
+            } else if (checkedId == R.id.out_of_stock_yes_button) {
+                productFilter.setOutOfStock(true);
+            } else if (checkedId == R.id.out_of_stock_no_button) {
+                productFilter.setOutOfStock(false);
             }
         });
     }
