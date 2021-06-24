@@ -28,8 +28,10 @@ import com.esafirm.imagepicker.features.ImagePickerMode;
 import com.esafirm.imagepicker.features.ImagePickerSavePath;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -321,12 +323,41 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void addEquipment() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference productsReference = databaseReference.child("Brand").child("Equipments");
-        String equipmentId = productsReference.push().getKey();
-        DatabaseReference productReference = productsReference.child(equipmentId);
-        equipment.setCreatedAt(System.currentTimeMillis());
-        productReference.setValue(equipment);
+        DatabaseReference sportsReference = FirebaseDatabase.getInstance().getReference().child("Brand").child("Sports");
+        sportsReference.get().addOnCompleteListener(task -> {
+            String currentSport = equipment.getSport().toLowerCase();
+            if (!task.isSuccessful()) {
+                Toast.makeText(requireContext(), "Failed to add an equipment", Toast.LENGTH_SHORT).show();
+            } else {
+                Object response = null;
+                DataSnapshot result = task.getResult();
+                if (result != null) {
+                    response = result.getValue();
+                }
+
+                List<String> sports = new ArrayList<>();
+                if (response != null) {
+                    sports = new ArrayList<>((List<String>) response);
+                }
+
+                boolean updateSports = true;
+                if (sports.contains(currentSport)) {
+                    updateSports = false;
+                } else {
+                    sports.add(currentSport);
+                }
+
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference productsReference = databaseReference.child("Brand").child("Equipments");
+                String equipmentId = productsReference.push().getKey();
+                DatabaseReference productReference = productsReference.child(equipmentId);
+                equipment.setCreatedAt(System.currentTimeMillis());
+                productReference.setValue(equipment);
+                if (updateSports) {
+                    sportsReference.setValue(sports);
+                }
+            }
+        });
     }
 
     private void setChooseImageVisibility(int visibility) {
