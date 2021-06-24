@@ -2,7 +2,6 @@ package com.cegep.sportify_admin.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -10,13 +9,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import com.cegep.sportify_admin.R;
+import com.cegep.sportify_admin.model.EquipmentFilter;
 import com.cegep.sportify_admin.model.ProductFilter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class HomeFragment extends Fragment implements ProductFilterListener {
+public class HomeFragment extends Fragment implements ProductFilterListener, EquipmentFilterListener {
 
     private ProductsListFragment productListFragment;
     private EquipmentsListFragment equipmentListFragment;
+
+    private boolean isShowingProducts = true;
 
     @Nullable
     @Override
@@ -34,11 +37,13 @@ public class HomeFragment extends Fragment implements ProductFilterListener {
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.action_clothing) {
+                isShowingProducts = true;
                 showProductsFragment();
                 return true;
             }
 
             if (item.getItemId() == R.id.action_equipment) {
+                isShowingProducts = false;
                 showEquipmentsFragment();
                 return true;
             }
@@ -77,15 +82,28 @@ public class HomeFragment extends Fragment implements ProductFilterListener {
     }
 
     private void showFiltersFragment() {
-        ProductFilterFragment productFilterFragment = new ProductFilterFragment();
-        productFilterFragment.setTargetFragment(this, 0);
-        productFilterFragment.show(getParentFragmentManager(), null);
+        BottomSheetDialogFragment filterFragment;
+        if (isShowingProducts) {
+            filterFragment = new ProductFilterFragment();
+        } else {
+            filterFragment = new EquipmentFilterFragment();
+        }
+
+        filterFragment.setTargetFragment(this, 0);
+        filterFragment.show(getParentFragmentManager(), null);
     }
 
     @Override
     public void onProductFilterSelected(ProductFilter filter) {
         if (productListFragment != null) {
             productListFragment.handleFilters(filter);
+        }
+    }
+
+    @Override
+    public void onEquipmentFilterSelected(EquipmentFilter filter) {
+        if (equipmentListFragment != null) {
+            equipmentListFragment.handleFilters(filter);
         }
     }
 }
