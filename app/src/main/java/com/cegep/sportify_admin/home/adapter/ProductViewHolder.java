@@ -59,7 +59,8 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
         productNameTextView.setText(product.getProductName());
         productPriceTextView.setText("$" + product.getPrice());
 
-        if (product.getSale() > 0 && !product.isOutOfStock()) {
+        boolean isOutOfStock = product.isOutOfStock();
+        if (product.getSale() > 0 && !isOutOfStock) {
             saleTextView.setText(product.getSale() + "%\noff");
             saleTextView.setVisibility(View.VISIBLE);
             saleBgImageView.setVisibility(View.VISIBLE);
@@ -68,7 +69,7 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
             saleBgImageView.setVisibility(View.GONE);
         }
 
-        if (product.isOutOfStock()) {
+        if (isOutOfStock) {
             outOfStockOverlay.setVisibility(View.VISIBLE);
         } else {
             outOfStockOverlay.setVisibility(View.GONE);

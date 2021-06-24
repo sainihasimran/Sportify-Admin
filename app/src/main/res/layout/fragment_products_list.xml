@@ -12,7 +12,7 @@
         android:layout_marginEnd="@dimen/size_l"
         android:layout_marginRight="@dimen/size_l"
         android:clipToPadding="false"
-        android:paddingTop="@dimen/size_l"
+        android:paddingBottom="@dimen/size_l"
         tools:listitem="@layout/item_product" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

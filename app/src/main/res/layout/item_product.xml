@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/size_l"
     android:layout_marginLeft="@dimen/size_l"
+    android:layout_marginTop="@dimen/size_l"
     app:elevation="@dimen/size_l">
 
     <androidx.constraintlayout.widget.ConstraintLayout
