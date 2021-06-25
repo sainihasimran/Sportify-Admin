@@ -64,18 +64,6 @@ public class AddProductFragment extends Fragment {
     private TextView addImageText;
     private TextView addImageDirectionsText;
 
-    private EditText nameEditText;
-    private EditText priceEditText;
-    private EditText saleEditText;
-    private EditText descriptionEditText;
-    private EditText xSmallEditText;
-    private EditText smallEditText;
-    private EditText mediumEditText;
-    private EditText largeEditText;
-    private EditText xLargeEditText;
-
-    private Button addProductButton;
-
     private ImagePickerLauncher imagepickerLauncher = null;
     private List<Image> images = new ArrayList<>();
     private final Product product = new Product();
@@ -144,7 +132,7 @@ public class AddProductFragment extends Fragment {
     }
 
     private void setupProductNameInput(View view) {
-        nameEditText = view.findViewById(R.id.name_editText);
+        EditText nameEditText = view.findViewById(R.id.name_editText);
         nameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -164,7 +152,7 @@ public class AddProductFragment extends Fragment {
     }
 
     private void setupPriceInput(View view) {
-        priceEditText = view.findViewById(R.id.price_editText);
+        EditText priceEditText = view.findViewById(R.id.price_editText);
         priceEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -184,7 +172,7 @@ public class AddProductFragment extends Fragment {
     }
 
     private void setupSaleEditText(View view) {
-        saleEditText = view.findViewById(R.id.sale_editText);
+        EditText saleEditText = view.findViewById(R.id.sale_editText);
         saleEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -235,7 +223,7 @@ public class AddProductFragment extends Fragment {
     }
 
     private void setupDescription(View view) {
-        descriptionEditText = view.findViewById(R.id.description_editText);
+        EditText descriptionEditText = view.findViewById(R.id.description_editText);
         descriptionEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -255,7 +243,7 @@ public class AddProductFragment extends Fragment {
     }
 
     private void setupSizesInput(View view) {
-        xSmallEditText = view.findViewById(R.id.x_small_text);
+        EditText xSmallEditText = view.findViewById(R.id.x_small_text);
         xSmallEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -277,7 +265,7 @@ public class AddProductFragment extends Fragment {
             }
         });
 
-        smallEditText = view.findViewById(R.id.small_text);
+        EditText smallEditText = view.findViewById(R.id.small_text);
         smallEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -299,7 +287,7 @@ public class AddProductFragment extends Fragment {
             }
         });
 
-        mediumEditText = view.findViewById(R.id.medium_text);
+        EditText mediumEditText = view.findViewById(R.id.medium_text);
         mediumEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -321,7 +309,7 @@ public class AddProductFragment extends Fragment {
             }
         });
 
-        largeEditText = view.findViewById(R.id.large_text);
+        EditText largeEditText = view.findViewById(R.id.large_text);
         largeEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -343,7 +331,7 @@ public class AddProductFragment extends Fragment {
             }
         });
 
-        xLargeEditText = view.findViewById(R.id.x_large_text);
+        EditText xLargeEditText = view.findViewById(R.id.x_large_text);
         xLargeEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -406,7 +394,7 @@ public class AddProductFragment extends Fragment {
     }
 
     private void setupAddButtonClick(View view) {
-        addProductButton = view.findViewById(R.id.add_product_button);
+        Button addProductButton = view.findViewById(R.id.add_product_button);
         addProductButton.setOnClickListener(v -> {
             if (product.isValid(requireContext())) {
                 if (images.isEmpty()) {
