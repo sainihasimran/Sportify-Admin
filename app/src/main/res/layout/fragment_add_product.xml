@@ -122,14 +122,52 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sport_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_l"
+            android:hint="@string/sport"
+            app:layout_constraintTop_toBottomOf="@id/price_input">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sport_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:textColor="@color/black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/team_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_l"
+            android:hint="@string/team"
+            app:layout_constraintTop_toBottomOf="@id/sport_input">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/team_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:textColor="@color/black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/sale_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size_l"
             android:hint="@string/sale"
-            app:suffixText="%"
-            app:layout_constraintTop_toBottomOf="@id/price_input">
+            app:layout_constraintTop_toBottomOf="@id/team_input"
+            app:suffixText="%">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/sale_editText"

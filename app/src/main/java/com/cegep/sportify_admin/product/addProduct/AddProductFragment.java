@@ -36,12 +36,15 @@ import com.esafirm.imagepicker.features.ImagePickerMode;
 import com.esafirm.imagepicker.features.ImagePickerSavePath;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -51,7 +54,10 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,6 +88,8 @@ public class AddProductFragment extends Fragment {
         setupImagePager(view);
         setupChooseProductImages(view);
         setupProductNameInput(view);
+        setupSportInput(view);
+        setupTeamInput(view);
         setupPriceInput(view);
         setupSaleEditText(view);
         setupCategories(view);
@@ -162,6 +170,46 @@ public class AddProductFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 product.setProductPrice(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupSportInput(View view) {
+        EditText sportEditText = view.findViewById(R.id.sport_editText);
+        sportEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                product.setSport(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupTeamInput(View view) {
+        EditText teamEditText = view.findViewById(R.id.team_editText);
+        teamEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                product.setTeam(s.toString());
             }
 
             @Override
@@ -398,7 +446,7 @@ public class AddProductFragment extends Fragment {
         addProductButton.setOnClickListener(v -> {
             if (product.isValid(requireContext())) {
                 if (images.isEmpty()) {
-                    addProduct();
+                    checkSportExistence();
                 } else {
                     uploadImages();
                 }
@@ -453,8 +501,70 @@ public class AddProductFragment extends Fragment {
             }
 
             product.setImages(imageUrls);
-            addProduct();
+            checkSportExistence();
         }).addOnFailureListener(e -> Toast.makeText(requireContext(), "Failed to upload images", Toast.LENGTH_SHORT).show());
+    }
+
+    private void checkSportExistence() {
+        if (product.hasSport()) {
+            final String currentSport = product.getSport().toLowerCase();
+            final String currentTeam = product.getTeam().toLowerCase();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference sportWithTeamsReference = databaseReference.child("Brand").child("SportWithTeams");
+            sportWithTeamsReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(requireContext(), "Failed to add product", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        DataSnapshot result = task.getResult();
+                        Map<String, List<String>> sportWithTeams = new HashMap<>();
+                        if (result != null) {
+                            GenericTypeIndicator<Map<String, List<String>>> t = new GenericTypeIndicator<Map<String, List<String>>>() {
+                            };
+
+                            sportWithTeams = result.getValue(t);
+                        }
+
+                        boolean shouldSetValue = true;
+                        if (sportWithTeams == null) {
+                            sportWithTeams = new HashMap<>();
+                            List<String> teams = new ArrayList<>();
+                            teams.add(currentTeam);
+                            sportWithTeams.put(currentSport, teams);
+                        } else {
+                            List<String> teams = sportWithTeams.get(currentSport);
+                            if (teams == null) {
+                                sportWithTeams.put(currentSport, Collections.singletonList(currentTeam));
+                            } else if (teams.isEmpty()) {
+                                teams.add(currentTeam);
+                            } else {
+                                if (!teams.contains(currentTeam)) {
+                                    teams.add(currentTeam);
+                                } else {
+                                    shouldSetValue = false;
+                                }
+                            }
+                        }
+
+                        if (shouldSetValue) {
+                            sportWithTeamsReference.setValue(sportWithTeams).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    addProduct();
+                                } else {
+                                    Toast.makeText(requireContext(), "Failed to add product", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            addProduct();
+                        }
+                    }
+                }
+            });
+        } else {
+            addProduct();
+        }
     }
 
     private void addProduct() {

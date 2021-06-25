@@ -13,6 +13,10 @@ public class Product {
 
     private float price = -1f;
 
+    private String sport;
+
+    private String team;
+
     private int sale = 0;
 
     private String category;
@@ -42,7 +46,7 @@ public class Product {
     }
 
     public void setProductName(String productName) {
-        this.productName = productName;
+        this.productName = productName.trim();
     }
 
     public float getPrice() {
@@ -51,6 +55,22 @@ public class Product {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public String getSport() {
+        return sport;
+    }
+
+    public void setSport(String sport) {
+        this.sport = sport.trim();
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public void setTeam(String team) {
+        this.team = team.trim();
     }
 
     public int getSale() {
@@ -195,10 +215,21 @@ public class Product {
             return false;
         }
 
+        if (!TextUtils.isEmpty(sport)) {
+            if (TextUtils.isEmpty(team)) {
+                Toast.makeText(context, R.string.error_empty_team, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
         return true;
     }
 
     public boolean isOutOfStock() {
         return (getxSmallSize() + getSmallSize() + getMediumSize() + getLargeSize() + getxLargeSize()) == 0;
+    }
+
+    public boolean hasSport() {
+        return !TextUtils.isEmpty(sport);
     }
 }

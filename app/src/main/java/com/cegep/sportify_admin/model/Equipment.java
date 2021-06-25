@@ -30,7 +30,7 @@ public class Equipment {
     }
 
     public void setEquipmentName(String equipmentName) {
-        this.equipmentName = equipmentName;
+        this.equipmentName = equipmentName.trim();
     }
 
     public float getPrice() {
@@ -70,7 +70,7 @@ public class Equipment {
     }
 
     public void setSport(String sport) {
-        this.sport = sport;
+        this.sport = sport.trim();
     }
 
     public String getDescription() {

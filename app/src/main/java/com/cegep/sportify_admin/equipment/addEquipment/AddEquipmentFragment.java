@@ -1,4 +1,4 @@
-package com.cegep.sportify_admin.equipment.addEquipment;
+ package com.cegep.sportify_admin.equipment.addEquipment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -313,7 +313,7 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void addEquipment() {
-        DatabaseReference sportsReference = FirebaseDatabase.getInstance().getReference().child("Brand").child("Sports");
+        DatabaseReference sportsReference = FirebaseDatabase.getInstance().getReference().child("Sports");
         sportsReference.get().addOnCompleteListener(task -> {
             String currentSport = equipment.getSport().toLowerCase();
             if (!task.isSuccessful()) {
