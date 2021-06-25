@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 public class Splash extends AppCompatActivity {
@@ -16,15 +14,12 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         setContentView(R.layout.activity_splash);
         imageView=findViewById(R.id.imageView);
-        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.clockwise);
-        imageView.startAnimation(animation);
 
         Thread timer=new Thread()
         {
             public void run() {
                 try {
-                    sleep(5000);
+                    sleep(2000);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
