@@ -17,7 +17,7 @@ public class Product {
 
     private String team;
 
-    private int sale = 0;
+    private int sale;
 
     private String category;
 
