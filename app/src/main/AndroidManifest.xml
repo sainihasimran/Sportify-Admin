@@ -39,7 +39,11 @@
 
         <activity android:name=".equipment.editEquipment.EditEquipmentActivity" />
 
-        <activity android:name=".settings.ProfileActivity" />
+        <activity android:name=".settings.ProfileActivity" >
+
+        </activity>
+
+
 
         <activity android:name=".LoginActivity" />
     </application>

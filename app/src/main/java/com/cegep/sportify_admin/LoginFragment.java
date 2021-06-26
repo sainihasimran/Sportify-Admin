@@ -1,5 +1,7 @@
 package com.cegep.sportify_admin;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +17,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cegep.sportify_admin.settings.ProfileActivity;
+import com.cegep.sportify_admin.settings.ProfileFragment;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -26,6 +31,7 @@ public class LoginFragment extends Fragment {
     EditText admin_email, admin_pass;
     Button signin_btn;
     TextView joinus;
+
     public LoginFragment() {
     }
 
@@ -65,6 +71,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Here you can redirect to SignUp fragment
+
             }
         });
     }
@@ -84,11 +91,13 @@ public class LoginFragment extends Fragment {
     {
         firebaseAuth.signInWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(getActivity(), task -> {
-                     if (task.isSuccessful())
-                     {
+                    if (task.isSuccessful()) {
                         Toast.makeText(getActivity().getApplicationContext(), "Login Success!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(requireContext(), ProfileActivity.class);
+                            startActivity(intent);
+                        }
 
-                     } else {
+                    else {
                         Toast.makeText(getActivity().getApplicationContext(), "Authenticate Failed!", Toast.LENGTH_SHORT).show();
                      }
                 });
