@@ -9,6 +9,8 @@ import java.util.List;
 
 public class Equipment {
 
+    private String equipmentId;
+
     private String equipmentName;
 
     private float price = -1f;
@@ -25,12 +27,20 @@ public class Equipment {
 
     private List<String> images = new ArrayList<>();
 
+    public String getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(String equipmentId) {
+        this.equipmentId = equipmentId;
+    }
+
     public String getEquipmentName() {
         return equipmentName;
     }
 
     public void setEquipmentName(String equipmentName) {
-        this.equipmentName = equipmentName;
+        this.equipmentName = equipmentName.trim();
     }
 
     public float getPrice() {
@@ -70,7 +80,7 @@ public class Equipment {
     }
 
     public void setSport(String sport) {
-        this.sport = sport;
+        this.sport = sport.trim();
     }
 
     public String getDescription() {
