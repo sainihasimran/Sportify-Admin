@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.cegep.sportify_admin.settings.ProfileActivity;
+
 public class Splash extends AppCompatActivity {
     ImageView imageView;
     @Override
@@ -35,7 +37,7 @@ public class Splash extends AppCompatActivity {
 
                    */
 
-                    Intent i = new Intent(Splash.this, MainActivity.class);
+                    Intent i = new Intent(Splash.this, ProfileActivity.class);
                     finish();
                     startActivity(i);
 

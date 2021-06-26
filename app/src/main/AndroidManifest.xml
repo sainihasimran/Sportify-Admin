@@ -23,6 +23,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".settings.ProfileActivity" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -37,7 +39,7 @@
 
         <activity android:name=".equipment.editEquipment.EditEquipmentActivity" />
 
-        <activity android:name=".settings.ProfileActivity" />
+
 
         <activity android:name=".LoginActivity" />
     </application>
