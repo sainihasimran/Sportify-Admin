@@ -43,6 +43,31 @@ public class Product {
 
     private List<String> images = new ArrayList<>();
 
+    public Product() {
+
+    }
+
+    //copy constructor
+    public Product(Product other) {
+        this.productId = other.productId;
+        this.productName = other.productName;
+        this.price = other.price;
+        this.sport = other.sport;
+        this.team = other.team;
+        this.sale = other.sale;
+        this.category = other.category;
+        this.subCategory = other.subCategory;
+        this.description = other.description;
+        this.xSmallSize = other.xSmallSize;
+        this.smallSize = other.smallSize;
+        this.mediumSize = other.mediumSize;
+        this.largeSize = other.largeSize;
+        this.xLargeSize = other.xLargeSize;
+        this.createdAt = other.createdAt;
+        this.colors = other.colors;
+        this.images = other.images;
+    }
+
     public String getProductId() {
         return productId;
     }

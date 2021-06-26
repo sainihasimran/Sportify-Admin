@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".SignUpFragment">
 
+    <ImageView
+        android:id="@+id/imgsignup"
+        android:layout_width="116dp"
+        android:layout_height="131dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/admin_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="353dp"
@@ -15,8 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.737"
-        tools:layout_editor_absoluteY="176dp">
+        app:layout_constraintVertical_bias="0.977">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/bname"
@@ -59,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -78,6 +89,7 @@
 
         <Button
             android:id="@+id/btn1"
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="201dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -85,7 +97,6 @@
             android:layout_marginBottom="10dp"
             android:background="@color/black"
             android:fontFamily="sans-serif-condensed"
-            style="@style/Widget.MaterialComponents.Button.Icon"
             android:text="SUBMIT"
             android:textColor="@color/white"
             android:textSize="25sp"
@@ -115,10 +126,9 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.455"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.196" />
+        app:layout_constraintVertical_bias="0.058" />
 
     <ProgressBar
         android:id="@+id/progressBar3"

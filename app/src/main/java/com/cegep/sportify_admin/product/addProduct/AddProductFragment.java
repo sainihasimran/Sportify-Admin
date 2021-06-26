@@ -129,7 +129,7 @@ public class AddProductFragment extends Fragment {
     private void setupChooseProductImages(View view) {
         addImageBackground = view.findViewById(R.id.add_image_background);
         addImagePlaceholder = view.findViewById(R.id.add_image_placeholder);
-        addImageText = view.findViewById(R.id.add_image_text);
+        addImageText = view.findViewById(R.id.edit_image_text);
         addImageDirectionsText = view.findViewById(R.id.add_image_directions_text);
 
         View.OnClickListener onClickListener = v -> pickImage();
