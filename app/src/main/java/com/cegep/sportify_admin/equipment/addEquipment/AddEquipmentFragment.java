@@ -1,4 +1,4 @@
-package com.cegep.sportify_admin.equipment.addEquipment;
+ package com.cegep.sportify_admin.equipment.addEquipment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -53,15 +53,6 @@ public class AddEquipmentFragment extends Fragment {
     private ImageView addImagePlaceholder;
     private TextView addImageText;
     private TextView addImageDirectionsText;
-
-    private EditText nameEditText;
-    private EditText priceEditText;
-    private EditText saleEditText;
-    private EditText sportEditText;
-    private EditText descriptionEditText;
-    private EditText stockEditText;
-
-    private Button addEquipmentButton;
 
     private ImagePickerLauncher imagepickerLauncher = null;
 
@@ -130,7 +121,7 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void setupProductNameInput(View view) {
-        nameEditText = view.findViewById(R.id.name_editText);
+        EditText nameEditText = view.findViewById(R.id.name_editText);
         nameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -150,7 +141,7 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void setupProductPriceInput(View view) {
-        priceEditText = view.findViewById(R.id.price_editText);
+        EditText priceEditText = view.findViewById(R.id.price_editText);
         priceEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -170,7 +161,7 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void setupSaleInput(View view) {
-        saleEditText = view.findViewById(R.id.sale_editText);
+        EditText saleEditText = view.findViewById(R.id.sale_editText);
         saleEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -194,7 +185,7 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void setupSportInput(View view) {
-        sportEditText = view.findViewById(R.id.sport_editText);
+        EditText sportEditText = view.findViewById(R.id.sport_editText);
         sportEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -214,7 +205,7 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void setupProductDescriptionInput(View view) {
-        descriptionEditText = view.findViewById(R.id.description_editText);
+        EditText descriptionEditText = view.findViewById(R.id.description_editText);
         descriptionEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -234,7 +225,7 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void setupStockInput(View view) {
-        stockEditText = view.findViewById(R.id.stock_text);
+        EditText stockEditText = view.findViewById(R.id.stock_text);
         stockEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -258,7 +249,7 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void setupAddButtonClick(View view) {
-        addEquipmentButton = view.findViewById(R.id.add_product_button);
+        Button addEquipmentButton = view.findViewById(R.id.add_product_button);
         addEquipmentButton.setOnClickListener(v -> {
             if (equipment.isValid(requireContext())) {
                 if (images.isEmpty()) {
@@ -322,7 +313,7 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void addEquipment() {
-        DatabaseReference sportsReference = FirebaseDatabase.getInstance().getReference().child("Brand").child("Sports");
+        DatabaseReference sportsReference = FirebaseDatabase.getInstance().getReference().child("Sports");
         sportsReference.get().addOnCompleteListener(task -> {
             String currentSport = equipment.getSport().toLowerCase();
             if (!task.isSuccessful()) {
@@ -350,6 +341,7 @@ public class AddEquipmentFragment extends Fragment {
                 DatabaseReference productsReference = databaseReference.child("Brand").child("Equipments");
                 String equipmentId = productsReference.push().getKey();
                 DatabaseReference productReference = productsReference.child(equipmentId);
+                equipment.setEquipmentId(equipmentId);
                 equipment.setCreatedAt(System.currentTimeMillis());
                 productReference.setValue(equipment);
                 if (updateSports) {

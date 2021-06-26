@@ -29,6 +29,8 @@
             android:launchMode="singleTop"
             android:theme="@style/Theme.SportifyAdmin.NoActionBar" />
 
+        <activity android:name=".HomeActivity" />
+
         <activity android:name=".product.addProduct.AddProductActivity" />
 
         <activity android:name=".equipment.addEquipment.AddEquipmentActivity" />
@@ -37,7 +39,11 @@
 
         <activity android:name=".equipment.editEquipment.EditEquipmentActivity" />
 
-        <activity android:name=".settings.ProfileActivity" />
+        <activity android:name=".settings.ProfileActivity" >
+
+        </activity>
+
+
 
         <activity android:name=".LoginActivity" />
 

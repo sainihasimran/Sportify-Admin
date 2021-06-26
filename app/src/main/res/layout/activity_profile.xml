@@ -20,6 +20,8 @@
             app:title="@string/profile"
             app:titleTextColor="@color/white" />
 
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.fragment.app.FragmentContainerView
