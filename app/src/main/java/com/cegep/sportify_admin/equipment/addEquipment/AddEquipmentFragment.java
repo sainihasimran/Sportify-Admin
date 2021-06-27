@@ -1,4 +1,4 @@
- package com.cegep.sportify_admin.equipment.addEquipment;
+package com.cegep.sportify_admin.equipment.addEquipment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -263,9 +263,9 @@ public class AddEquipmentFragment extends Fragment {
 
     private void pickImage() {
         ImagePickerConfig config = new ImagePickerConfig(ImagePickerMode.MULTIPLE, "Folder", "Tap to select", "DONE", 0, 4, 0, true, false, false,
-                                                         false, false,
-                                                         new ArrayList<>(), new ArrayList<>(), new ImagePickerSavePath("Camera", true),
-                                                         ReturnMode.NONE, false, true);
+                false, false,
+                new ArrayList<>(), new ArrayList<>(), new ImagePickerSavePath("Camera", true),
+                ReturnMode.NONE, false, true);
         imagepickerLauncher.launch(config);
 
     }

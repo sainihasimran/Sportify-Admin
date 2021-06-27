@@ -260,7 +260,7 @@ public class AddProductFragment extends Fragment {
         List<String> subCategories = Arrays.asList(Constants.SUB_CATEGORIES);
 
         ArrayAdapter<String> subCategoriesAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1,
-                                                                       subCategories);
+                subCategories);
         AutoCompleteTextView subCategoryTextView = view.findViewById(R.id.sub_category_textView);
         subCategoryTextView.setAdapter(subCategoriesAdapter);
 
@@ -456,9 +456,9 @@ public class AddProductFragment extends Fragment {
 
     private void pickImage() {
         ImagePickerConfig config = new ImagePickerConfig(ImagePickerMode.MULTIPLE, "Folder", "Tap to select", "DONE", 0, 4, 0, true, false, false,
-                                                         false, false,
-                                                         new ArrayList<>(), new ArrayList<>(), new ImagePickerSavePath("Camera", true),
-                                                         ReturnMode.NONE, false, true);
+                false, false,
+                new ArrayList<>(), new ArrayList<>(), new ImagePickerSavePath("Camera", true),
+                ReturnMode.NONE, false, true);
         imagepickerLauncher.launch(config);
 
     }

@@ -94,6 +94,7 @@ public class ProductsListFragment extends Fragment implements ItemClickListener<
     public void onClick(Product obj) {
         selectedProduct = obj;
         Intent intent = new Intent(requireContext(), EditProductActivity.class);
+        intent.putExtra("product_name", obj.getProductName());
         requireActivity().startActivity(intent);
     }
 
