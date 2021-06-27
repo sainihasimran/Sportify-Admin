@@ -27,6 +27,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import static android.content.ContentValues.TAG;
 
@@ -75,8 +81,9 @@ public class LoginFragment extends Fragment {
         joinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Here you can redirect to SignUp fragment
-
+                Intent intent = new Intent(requireContext(), SignUpActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
             }
         });
     }
@@ -88,9 +95,37 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getActivity().getApplicationContext(), "Login Success!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(requireContext(), ProfileActivity.class);
-                            startActivity(intent);
+                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                            DatabaseReference databaseReference  = firebaseDatabase.getReference("Admin");
+                            Query query = databaseReference.orderByChild("email").equalTo(currentUser.getEmail());
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    DataSnapshot adminSnapshot = null;
+                                    for (DataSnapshot child : snapshot.getChildren()) {
+                                        adminSnapshot = child;
+                                    }
+                                    Admin admin = adminSnapshot.getValue(Admin.class);
+                                    SportifyAdminApp.admin = admin;
+
+                                    if (admin == null) {
+                                        Toast.makeText(requireContext(), "Failed to login", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getActivity().getApplicationContext(), "Login Success!", Toast.LENGTH_SHORT).show();
+
+                                        Intent intent = new Intent(requireContext(), HomeActivity.class);
+                                        startActivity(intent);
+                                        requireActivity().finish();
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(), "Authenticate Failed!", Toast.LENGTH_SHORT).show();
                         }

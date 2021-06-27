@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.cegep.sportify_admin.R;
+import com.cegep.sportify_admin.SportifyAdminApp;
 import com.cegep.sportify_admin.home.ProductsListFragment;
 import com.cegep.sportify_admin.model.Product;
 import com.google.firebase.database.DatabaseReference;
@@ -271,7 +272,7 @@ public class EditProductFragment extends Fragment {
 
     private void editProduct() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference productsReference = databaseReference.child("Brand").child("Products");
+        DatabaseReference productsReference = databaseReference.child("Admin").child(SportifyAdminApp.admin.adminId).child("Products");
         DatabaseReference productReference = productsReference.child(product.getProductId());
         productReference.setValue(product);
         requireActivity().finish();

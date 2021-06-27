@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.cegep.sportify_admin.Constants;
 import com.cegep.sportify_admin.R;
+import com.cegep.sportify_admin.SportifyAdminApp;
 import com.cegep.sportify_admin.gallery.ImageAdapter;
 import com.cegep.sportify_admin.model.Product;
 import com.esafirm.imagepicker.features.ImagePickerConfig;
@@ -568,8 +569,8 @@ public class AddProductFragment extends Fragment {
     }
 
     private void addProduct() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference productsReference = databaseReference.child("Brand").child("Products");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin").child(SportifyAdminApp.admin.adminId);
+        DatabaseReference productsReference = databaseReference.child("Products");
         String productId = productsReference.push().getKey();
         DatabaseReference productReference = productsReference.child(productId);
         product.setProductId(productId);
