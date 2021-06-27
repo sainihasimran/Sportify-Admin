@@ -89,7 +89,7 @@ public class LoginFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity().getApplicationContext(), "Login Success!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(requireContext(), ProfileActivity.class);
+                            Intent intent = new Intent(requireContext(), SignUpActivity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(), "Authenticate Failed!", Toast.LENGTH_SHORT).show();

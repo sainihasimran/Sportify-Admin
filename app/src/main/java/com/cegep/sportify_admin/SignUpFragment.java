@@ -66,7 +66,7 @@ public class SignUpFragment extends Fragment {
     TextInputLayout txtmail, txtpswd, brandname,txtcpswd;
     TextView tvlogin;
     ProgressBar bar;
-    String fuser,stringpath;
+    String stringpath;
     ImageView img;
     FirebaseAuth fauth;
     Uri imguri;
@@ -144,19 +144,15 @@ public class SignUpFragment extends Fragment {
                         if (task.isSuccessful()) {
                             bar.setVisibility(View.INVISIBLE);
 
-                            fuser = fauth.getCurrentUser().getUid();
-                            //call login activity instead and finish this activity
-                            LoginFragment fragment2 = new LoginFragment();
-                            FragmentManager fragmentManager = getFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.fragment_container, fragment2);
-                            fragmentTransaction.commit();
-                            Toast.makeText(getActivity(), "User Registered", Toast.LENGTH_SHORT).show();
-
+                            String adminId = mDatabase.push().getKey();
                             String email = txtmail.getEditText().getText().toString();
                             Admin admin = new Admin(email,stringpath);
+                            admin.adminId = adminId;
                             admin.brandname = bname;
-                            mDatabase.push().setValue(admin);
+                            mDatabase.child(adminId).setValue(admin);
+
+                            Intent intent = new Intent(requireContext(), LoginActivity.class);
+
 
                         } else {
                             bar.setVisibility(View.INVISIBLE);

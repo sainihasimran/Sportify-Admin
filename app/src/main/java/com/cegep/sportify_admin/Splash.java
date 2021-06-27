@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.cegep.sportify_admin.settings.ProfileActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Splash extends AppCompatActivity {
     ImageView imageView;
@@ -21,7 +23,7 @@ public class Splash extends AppCompatActivity {
         {
             public void run() {
                 try {
-                    sleep(2000);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -37,9 +39,16 @@ public class Splash extends AppCompatActivity {
 
                    */
 
-                    Intent i = new Intent(Splash.this, HomeActivity.class);
-                    finish();
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    Intent i;
+                    if (currentUser == null) {
+                        i = new Intent(Splash.this, LoginActivity.class);
+                    } else {
+                        i = new Intent(Splash.this, HomeActivity.class);
+                    }
                     startActivity(i);
+
+                    finish();
 
                 }
             }

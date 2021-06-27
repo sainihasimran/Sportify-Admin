@@ -2,8 +2,9 @@ package com.cegep.sportify_admin;
 
 public class Admin {
 
+    public String adminId;
     public String brandname;
-    public String email;;
+    public String email;
     public String image;
 
     public Admin() {
