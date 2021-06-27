@@ -53,5 +53,6 @@
     <string name="edit_product">Edit Product</string>
     <string name="edit_equipment">Edit Equipment</string>
     <string name="profile">Profile</string>
+    <string name="sign_out">Sign Out</string>
 
 </resources>
