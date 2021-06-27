@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.cegep.sportify_admin.R;
+import com.cegep.sportify_admin.SportifyAdminApp;
 import com.cegep.sportify_admin.gallery.ImageAdapter;
 import com.cegep.sportify_admin.model.Equipment;
 import com.esafirm.imagepicker.features.ImagePickerConfig;
@@ -337,8 +338,8 @@ public class AddEquipmentFragment extends Fragment {
                     sports.add(currentSport);
                 }
 
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                DatabaseReference productsReference = databaseReference.child("Brand").child("Equipments");
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin").child(SportifyAdminApp.admin.adminId);
+                DatabaseReference productsReference = databaseReference.child("Equipments");
                 String equipmentId = productsReference.push().getKey();
                 DatabaseReference productReference = productsReference.child(equipmentId);
                 equipment.setEquipmentId(equipmentId);

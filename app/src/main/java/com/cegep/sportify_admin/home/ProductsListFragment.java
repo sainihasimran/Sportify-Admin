@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.cegep.sportify_admin.ItemClickListener;
 import com.cegep.sportify_admin.R;
+import com.cegep.sportify_admin.SportifyAdminApp;
 import com.cegep.sportify_admin.home.adapter.ProductsAdapter;
 import com.cegep.sportify_admin.model.Product;
 import com.cegep.sportify_admin.model.ProductFilter;
@@ -72,7 +73,8 @@ public class ProductsListFragment extends Fragment implements ItemClickListener<
 
         setupRecyclerView(view);
         // TODO: 2021-06-23 Add product id
-        DatabaseReference productsReference = FirebaseDatabase.getInstance().getReference("Brand").child("Products");
+        DatabaseReference productsReference = FirebaseDatabase.getInstance().getReference("Admin").child(SportifyAdminApp.admin.adminId)
+                .child("Products");
         productsReference.addValueEventListener(valueEventListener);
 
         view.findViewById(R.id.add_product_button).setOnClickListener(v -> {

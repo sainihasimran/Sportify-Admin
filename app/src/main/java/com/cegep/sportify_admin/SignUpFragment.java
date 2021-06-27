@@ -209,6 +209,7 @@ public class SignUpFragment extends Fragment {
 
     private void uploadImage() {
         if (imguri == null) {
+            addUser();
             return;
         }
 
@@ -250,6 +251,7 @@ public class SignUpFragment extends Fragment {
         Admin admin = new Admin(email,stringpath);
         admin.adminId = adminId;
         admin.brandname = bname;
+        SportifyAdminApp.admin = admin;
         mDatabase.child(adminId).setValue(admin);
 
         Intent intent = new Intent(requireContext(), HomeActivity.class);

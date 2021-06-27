@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.cegep.sportify_admin.ItemClickListener;
 import com.cegep.sportify_admin.R;
+import com.cegep.sportify_admin.SportifyAdminApp;
 import com.cegep.sportify_admin.equipment.addEquipment.AddEquipmentActivity;
 import com.cegep.sportify_admin.equipment.editEquipment.EditEquipmentActivity;
 import com.cegep.sportify_admin.home.adapter.EquipmentsAdapter;
@@ -73,7 +74,7 @@ public class EquipmentsListFragment extends Fragment implements ItemClickListene
 
         setupRecyclerView(view);
         // TODO: 2021-06-23 Add equipment id
-        DatabaseReference equipmentsReference = FirebaseDatabase.getInstance().getReference("Brand").child("Equipments");
+        DatabaseReference equipmentsReference = FirebaseDatabase.getInstance().getReference("Admin").child(SportifyAdminApp.admin.adminId).child("Equipments");
         equipmentsReference.addValueEventListener(valueEventListener);
 
         view.findViewById(R.id.add_equipment_button).setOnClickListener(v -> {
