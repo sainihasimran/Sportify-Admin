@@ -27,6 +27,22 @@ public class Equipment {
 
     private List<String> images = new ArrayList<>();
 
+    public Equipment() {
+
+    }
+
+    public Equipment(Equipment other) {
+        this.equipmentId = other.equipmentId;
+        this.equipmentName = other.equipmentName;
+        this.price = other.price;
+        this.sale = other.sale;
+        this.stock = other.stock;
+        this.createdAt = other.createdAt;
+        this.sport = other.sport;
+        this.description = other.description;
+        this.images = other.images;
+    }
+
     public String getEquipmentId() {
         return equipmentId;
     }
