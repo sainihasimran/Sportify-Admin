@@ -9,76 +9,27 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
-            android:id="@+id/dots_indicator"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_s"
-            android:visibility="gone"
-            app:dotsColor="@color/black"
-            app:dotsSize="@dimen/size_m"
-            app:dotsSpacing="@dimen/size_s"
-            app:dotsStrokeColor="@color/black"
-            app:dotsStrokeWidth="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/viewPager" />
-
-        <ImageView
-            android:id="@+id/add_image_background"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:importantForAccessibility="no"
-            android:src="@color/grey"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/add_image_placeholder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.7"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_image"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/edit_image_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="@dimen/size_l"
+            android:hint="@string/name"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_goneMarginTop="232dp">
 
-        <TextView
-            android:id="@+id/edit_image_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_images"
-            android:textAppearance="?textAppearanceCaption"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@id/add_image_directions_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_image_placeholder" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:textColor="@color/black" />
 
-        <TextView
-            android:id="@+id/add_image_directions_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_m"
-            android:text="@string/add_image_directions"
-            android:textAppearance="?textAppearanceCaption"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/add_image_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_image_text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/price_input"
@@ -87,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size_l"
             android:hint="@string/original_price"
-            app:layout_constraintTop_toBottomOf="@id/add_image_background"
+            app:layout_constraintTop_toBottomOf="@id/name_input"
             app:prefixText="$">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -107,8 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size_l"
             android:hint="@string/sale"
-            app:suffixText="%"
-            app:layout_constraintTop_toBottomOf="@id/price_input">
+            app:layout_constraintTop_toBottomOf="@id/price_input"
+            app:suffixText="%">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/sale_editText"
@@ -362,34 +313,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/available_colors_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_l"
-            android:text="@string/available_colors"
-            android:textAppearance="?textAppearanceSubtitle2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/x_large_input" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/available_color_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_l"
-            android:layout_marginLeft="@dimen/size_l"
-            android:layout_marginTop="@dimen/size_m"
-            app:layout_constraintTop_toBottomOf="@id/available_colors_label">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/add_color_chip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_color"
-                app:chipIcon="@drawable/ic_add" />
-
-        </com.google.android.material.chip.ChipGroup>
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/edit_product_button"
             android:layout_width="match_parent"
@@ -397,7 +320,7 @@
             android:layout_margin="@dimen/size_l"
             android:text="@string/edit_product"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/available_color_group" />
+            app:layout_constraintTop_toBottomOf="@id/x_large_input" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

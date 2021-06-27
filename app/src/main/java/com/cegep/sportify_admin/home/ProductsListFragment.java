@@ -17,7 +17,6 @@ import com.cegep.sportify_admin.model.Product;
 import com.cegep.sportify_admin.model.ProductFilter;
 import com.cegep.sportify_admin.product.addProduct.AddProductActivity;
 import com.cegep.sportify_admin.product.editProduct.EditProductActivity;
-import com.cegep.sportify_admin.product.editProduct.EditProductFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -93,10 +92,10 @@ public class ProductsListFragment extends Fragment implements ItemClickListener<
 
     @Override
     public void onClick(Product obj) {
-
+        selectedProduct = obj;
         Intent intent = new Intent(requireContext(), EditProductActivity.class);
-        intent.putExtra("product_name",obj.getProductName());
-         requireActivity().startActivity(intent);
+        intent.putExtra("product_name", obj.getProductName());
+        requireActivity().startActivity(intent);
     }
 
     private void showProductList() {

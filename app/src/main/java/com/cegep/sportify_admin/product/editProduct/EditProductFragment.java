@@ -1,79 +1,33 @@
 package com.cegep.sportify_admin.product.editProduct;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
 import com.cegep.sportify_admin.R;
-import com.cegep.sportify_admin.gallery.ImageAdapter;
 import com.cegep.sportify_admin.home.ProductsListFragment;
 import com.cegep.sportify_admin.model.Product;
-import com.esafirm.imagepicker.features.ImagePickerConfig;
-import com.esafirm.imagepicker.features.ImagePickerLauncher;
-import com.esafirm.imagepicker.features.ImagePickerLauncherKt;
-import com.esafirm.imagepicker.features.ImagePickerMode;
-import com.esafirm.imagepicker.features.ImagePickerSavePath;
-import com.esafirm.imagepicker.features.ReturnMode;
-import com.esafirm.imagepicker.model.Image;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EditProductFragment extends Fragment {
 
-    private ViewPager viewPager;
-    private WormDotsIndicator dotsIndicator;
-    private ImageView addImageBackground;
-    private ImageView addImagePlaceholder;
-    private TextView addImageText;
-    private TextView addImageDirectionsText;
+    private Product product;
 
-    private EditText nameEditText;
-    private EditText priceEditText;
-    private EditText saleEditText;
-    private EditText descriptionEditText;
-    private EditText xSmallEditText;
-    private EditText smallEditText;
-    private EditText mediumEditText;
-    private EditText largeEditText;
-    private EditText xLargeEditText;
-    FirebaseDatabase fdb;
-
-    private Button editProductButton;
-
-    private ImagePickerLauncher imagepickerLauncher = null;
-    private List<Image> images = new ArrayList<>();
-    private final Product product = new Product(ProductsListFragment.selectedProduct);
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        product = new Product(ProductsListFragment.selectedProduct);
+    }
 
     @Nullable
     @Override
@@ -84,104 +38,242 @@ public class EditProductFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupImagePager(view);
-        setupChooseProductImages(view);
-        editPriceInput(view);
-        editSaleEditText(view);
-        editDescription(view);
-        editSizesInput(view);
-        setupColorPicker(view);
-        editButtonClick(view);
+        setupProductNameInput(view);
+        setupPriceInput(view);
+        setupSaleEditText(view);
+        setupDescription(view);
+        setupSizesInput(view);
+        setupEditButtonClick(view);
     }
 
-    public void onAttach(@NonNull @NotNull Context context) {
-        super.onAttach(context);
-        imagepickerLauncher = ImagePickerLauncherKt.registerImagePicker(this, images -> {
-            if (images == null || images.isEmpty()) {
-                return null;
+    private void setupProductNameInput(View view) {
+        EditText nameEditText = view.findViewById(R.id.name_editText);
+        nameEditText.setText(product.getProductName());
+        nameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
-            this.images = images;
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                product.setProductName(s.toString());
+            }
 
-            ImageAdapter viewPagerAdapter = new ImageAdapter(getChildFragmentManager(), images);
-            viewPager.setAdapter(viewPagerAdapter);
-            dotsIndicator.setViewPager(viewPager);
+            @Override
+            public void afterTextChanged(Editable s) {
 
-            viewPager.setVisibility(View.VISIBLE);
-            dotsIndicator.setVisibility(View.VISIBLE);
-            setChooseImageVisibility(View.GONE);
-            return null;
+            }
         });
     }
 
-    private void pickImage() {
-        ImagePickerConfig config = new ImagePickerConfig(ImagePickerMode.MULTIPLE, "Folder", "Tap to select", "DONE", 0, 4, 0, true, false, false,
-                false, false,
-                new ArrayList<>(), new ArrayList<>(), new ImagePickerSavePath("Camera", true),
-                ReturnMode.NONE, false, true);
-        imagepickerLauncher.launch(config);
+    private void setupPriceInput(View view) {
+        String priceStr = String.format("%.2f", product.getPrice());
+        EditText priceEditText = view.findViewById(R.id.price_editText);
+        priceEditText.setText(priceStr);
+        Selection.setSelection(priceEditText.getText(), priceEditText.length());
+        priceEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-    }
-
-    private void setupImagePager(View view) {
-        viewPager = view.findViewById(R.id.viewPager);
-        dotsIndicator = view.findViewById(R.id.dots_indicator);
-    }
-
-    private void setupChooseProductImages(View view) {
-        addImageBackground = view.findViewById(R.id.add_image_background);
-        addImagePlaceholder = view.findViewById(R.id.add_image_placeholder);
-        addImageText = view.findViewById(R.id.edit_image_text);
-        addImageDirectionsText = view.findViewById(R.id.add_image_directions_text);
-
-        View.OnClickListener onClickListener = v -> pickImage();
-        addImageBackground.setOnClickListener(onClickListener);
-        addImagePlaceholder.setOnClickListener(onClickListener);
-        addImageText.setOnClickListener(onClickListener);
-        addImageDirectionsText.setOnClickListener(onClickListener);
-    }
-
-
-    private void uploadImages() {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        List<String> imageUrls = new ArrayList<>();
-        List<String> uuids = new ArrayList<>();
-
-        List<UploadTask> uploadTasks = new ArrayList<>();
-
-        for (Image image : images) {
-            try {
-                String uuid = getUniqueId();
-                uuids.add(uuid);
-
-                InputStream stream = new FileInputStream(new File(image.getPath()));
-                StorageReference child = storageReference.child(uuid);
-
-                UploadTask uploadTask = child.putStream(stream);
-                uploadTasks.add(uploadTask);
-            } catch (Exception e) {
-                Toast.makeText(requireContext(), "Failed to upload images", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
-        Task<List<Task<?>>> uploadTask = Tasks.whenAllSuccess(uploadTasks);
-        uploadTask.continueWithTask(task -> {
-            List<Task<Uri>> downloadUrlTasks = new ArrayList<>();
-            for (String uuid : uuids) {
-                StorageReference child = storageReference.child(uuid);
-                downloadUrlTasks.add(child.getDownloadUrl());
             }
 
-            return Tasks.whenAllSuccess(downloadUrlTasks);
-        }).addOnSuccessListener(objects -> {
-            for (Object object : objects) {
-                imageUrls.add(object.toString());
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                product.setProductPrice(s.toString());
             }
 
-            product.setImages(imageUrls);
-            editProduct();
-        }).addOnFailureListener(e -> Toast.makeText(requireContext(), "Failed to upload images", Toast.LENGTH_SHORT).show());
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
+    private void setupSaleEditText(View view) {
+        String saleStr = String.valueOf(product.getSale());
+        EditText saleEditText = view.findViewById(R.id.sale_editText);
+        saleEditText.setText(saleStr);
+        saleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    product.setSale(0);
+                } else {
+                    product.setSale(Integer.parseInt(s.toString()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupDescription(View view) {
+        String descriptionStr = product.getDescription();
+        EditText descriptionEditText = view.findViewById(R.id.description_editText);
+        descriptionEditText.setText(descriptionStr);
+        descriptionEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                product.setDescription(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupSizesInput(View view) {
+        String xSmallStr = String.valueOf(product.getxSmallSize());
+        EditText xSmallEditText = view.findViewById(R.id.x_small_text);
+        xSmallEditText.setText(xSmallStr);
+        xSmallEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    product.setxSmallSize(0);
+                } else {
+                    product.setxSmallSize(Integer.parseInt(s.toString()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        String smallStr = String.valueOf(product.getSmallSize());
+        EditText smallEditText = view.findViewById(R.id.small_text);
+        smallEditText.setText(smallStr);
+        smallEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    product.setSmallSize(0);
+                } else {
+                    product.setSmallSize(Integer.parseInt(s.toString()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        String mediumStr = String.valueOf(product.getMediumSize());
+        EditText mediumEditText = view.findViewById(R.id.medium_text);
+        mediumEditText.setText(mediumStr);
+        mediumEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    product.setMediumSize(0);
+                } else {
+                    product.setMediumSize(Integer.parseInt(s.toString()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        String largeStr = String.valueOf(product.getLargeSize());
+        EditText largeEditText = view.findViewById(R.id.large_text);
+        largeEditText.setText(largeStr);
+        largeEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    product.setLargeSize(0);
+                } else {
+                    product.setLargeSize(Integer.parseInt(s.toString()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        String xLargeStr = String.valueOf(product.getxLargeSize());
+        EditText xLargeEditText = view.findViewById(R.id.x_large_text);
+        xLargeEditText.setText(xLargeStr);
+        xLargeEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    product.setxLargeSize(0);
+                } else {
+                    product.setxLargeSize(Integer.parseInt(s.toString()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void setupEditButtonClick(View view) {
+        Button editProductButton = view.findViewById(R.id.edit_product_button);
+        editProductButton.setOnClickListener(v -> {
+            if (product.isValid(requireContext())) {
+                editProduct();
+            }
+        });
+    }
+
+    private void editProduct() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference productsReference = databaseReference.child("Brand").child("Products");
+        DatabaseReference productReference = productsReference.child(product.getProductId());
+        productReference.setValue(product);
+        requireActivity().finish();
+    }
 }
