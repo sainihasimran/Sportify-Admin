@@ -75,8 +75,9 @@ public class LoginFragment extends Fragment {
         joinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Here you can redirect to SignUp fragment
-
+                Intent intent = new Intent(requireContext(), SignUpActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
             }
         });
     }
@@ -89,7 +90,7 @@ public class LoginFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity().getApplicationContext(), "Login Success!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(requireContext(), SignUpActivity.class);
+                            Intent intent = new Intent(requireContext(), HomeActivity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(), "Authenticate Failed!", Toast.LENGTH_SHORT).show();

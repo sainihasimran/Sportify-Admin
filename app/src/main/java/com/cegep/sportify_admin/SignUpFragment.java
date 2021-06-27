@@ -70,8 +70,6 @@ public class SignUpFragment extends Fragment {
     ImageView img;
     FirebaseAuth fauth;
     Uri imguri;
-    Intent idata;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,50 +115,41 @@ public class SignUpFragment extends Fragment {
                     bar.setVisibility(View.INVISIBLE);
                     brandname.setError("Brand name field is empty!");
                 }
-                if(TextUtils.isEmpty(email))
+                else if(TextUtils.isEmpty(email))
                 {
                     bar.setVisibility(View.INVISIBLE);
                     txtmail.setError("Email is Required.");
                 }
 
-                if(TextUtils.isEmpty(password))
+                else if(TextUtils.isEmpty(password))
                 {
                     bar.setVisibility(View.INVISIBLE);
                     txtpswd.setError("Password is Required.");
                 }
 
-                if(password.length()<9) {
+                else if(password.length()<9) {
                     bar.setVisibility(View.INVISIBLE);
                     txtpswd.setError("Length of password is not less than 9.");
                 }
-                if(!password.equals(cpassword)){
+                else if(!password.equals(cpassword)){
                     bar.setVisibility(View.INVISIBLE);
                     txtcpswd.setError("Password not matched!");
-                }
-
-                fauth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            bar.setVisibility(View.INVISIBLE);
-
-                            String adminId = mDatabase.push().getKey();
-                            String email = txtmail.getEditText().getText().toString();
-                            Admin admin = new Admin(email,stringpath);
-                            admin.adminId = adminId;
-                            admin.brandname = bname;
-                            mDatabase.child(adminId).setValue(admin);
-
-                            Intent intent = new Intent(requireContext(), LoginActivity.class);
-
-
-                        } else {
-                            bar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(getActivity(), "Registeration Failed", Toast.LENGTH_SHORT).show();
+                } else {
+                    fauth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                uploadImage();
+                                bar.setVisibility(View.INVISIBLE);
+                            } else {
+                                bar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(getActivity(), "Registeration Failed", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
 
-                });
+                    });
+
+                }
 
             }
         });
@@ -168,13 +157,9 @@ public class SignUpFragment extends Fragment {
         tvlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                LoginFragment fragment2 = new LoginFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment2);
-                fragmentTransaction.commit();
-
+                Intent intent = new Intent(requireContext(), LoginActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
             }
         });
 
@@ -208,7 +193,6 @@ public class SignUpFragment extends Fragment {
             if(data!=null)
             {
                 imguri = data.getData();
-                idata = data;
 
                 try{
                     InputStream inputStream = getActivity().getContentResolver().openInputStream(imguri);
@@ -217,34 +201,59 @@ public class SignUpFragment extends Fragment {
 
                 }catch (FileNotFoundException e){
                     e.printStackTrace();
+                    Toast.makeText(requireContext(), "Failed to laod image", Toast.LENGTH_SHORT).show();
                 }
-
-                final StorageReference storageReference = storageRef.child("images/"+ UUID.randomUUID().toString());
-
-                storageReference.putFile(imguri)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        final Uri downloadUrl = uri;
-                                        stringpath = uri.toString();
-                                    }
-                                });
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                Toast.makeText(getContext(), "Image cannot be uploaded.", Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
             }
         }
     }
 
+    private void uploadImage() {
+        if (imguri == null) {
+            return;
+        }
 
+        final StorageReference storageReference = storageRef.child("images/"+ UUID.randomUUID().toString());
+
+        storageReference.putFile(imguri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                final Uri downloadUrl = uri;
+                                stringpath = uri.toString();
+                                addUser();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(requireContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(getContext(), "Image cannot be uploaded.", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+    }
+
+    private void addUser() {
+        String bname = brandname.getEditText().getText().toString();
+        String adminId = mDatabase.push().getKey();
+        String email = txtmail.getEditText().getText().toString();
+        Admin admin = new Admin(email,stringpath);
+        admin.adminId = adminId;
+        admin.brandname = bname;
+        mDatabase.child(adminId).setValue(admin);
+
+        Intent intent = new Intent(requireContext(), HomeActivity.class);
+        startActivity(intent);
+        requireActivity().finish();
+    }
 }
