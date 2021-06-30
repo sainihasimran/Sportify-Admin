@@ -168,6 +168,20 @@
                     android:background="@color/black" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/update_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_xl"
+                    android:text="UPDATE ADMIN DETAILS"/>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/black" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/sign_out_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
