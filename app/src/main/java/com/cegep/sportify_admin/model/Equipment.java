@@ -25,6 +25,8 @@ public class Equipment {
 
     private String description;
 
+    private String adminId;
+
     private List<String> images = new ArrayList<>();
 
     public Equipment() {
@@ -105,6 +107,14 @@ public class Equipment {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
     }
 
     public List<String> getImages() {

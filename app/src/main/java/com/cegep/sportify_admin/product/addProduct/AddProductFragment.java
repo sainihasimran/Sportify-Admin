@@ -28,8 +28,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.cegep.sportify_admin.Constants;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.SportifyAdminApp;
+import com.cegep.sportify_admin.Utils;
 import com.cegep.sportify_admin.gallery.ImageAdapter;
 import com.cegep.sportify_admin.model.Product;
+import com.cegep.sportify_admin.model.SportWithTeams;
 import com.esafirm.imagepicker.features.ImagePickerConfig;
 import com.esafirm.imagepicker.features.ImagePickerLauncher;
 import com.esafirm.imagepicker.features.ImagePickerLauncherKt;
@@ -37,15 +39,12 @@ import com.esafirm.imagepicker.features.ImagePickerMode;
 import com.esafirm.imagepicker.features.ImagePickerSavePath;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -56,9 +55,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
@@ -175,7 +172,6 @@ public class AddProductFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
@@ -261,7 +257,7 @@ public class AddProductFragment extends Fragment {
         List<String> subCategories = Arrays.asList(Constants.SUB_CATEGORIES);
 
         ArrayAdapter<String> subCategoriesAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1,
-                subCategories);
+                                                                       subCategories);
         AutoCompleteTextView subCategoryTextView = view.findViewById(R.id.sub_category_textView);
         subCategoryTextView.setAdapter(subCategoriesAdapter);
 
@@ -457,9 +453,9 @@ public class AddProductFragment extends Fragment {
 
     private void pickImage() {
         ImagePickerConfig config = new ImagePickerConfig(ImagePickerMode.MULTIPLE, "Folder", "Tap to select", "DONE", 0, 4, 0, true, false, false,
-                false, false,
-                new ArrayList<>(), new ArrayList<>(), new ImagePickerSavePath("Camera", true),
-                ReturnMode.NONE, false, true);
+                                                         false, false,
+                                                         new ArrayList<>(), new ArrayList<>(), new ImagePickerSavePath("Camera", true),
+                                                         ReturnMode.NONE, false, true);
         imagepickerLauncher.launch(config);
 
     }
@@ -510,56 +506,53 @@ public class AddProductFragment extends Fragment {
         if (product.hasSport()) {
             final String currentSport = product.getSport().toLowerCase();
             final String currentTeam = product.getTeam().toLowerCase();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            DatabaseReference sportWithTeamsReference = databaseReference.child("Brand").child("SportWithTeams");
-            sportWithTeamsReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (!task.isSuccessful()) {
-                        Toast.makeText(requireContext(), "Failed to add product", Toast.LENGTH_SHORT).show();
+            DatabaseReference sportWithTeamsReference = Utils.getSportWithTeamsReference().child(currentSport);
+            sportWithTeamsReference.get().addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(requireContext(), "Failed to add product", Toast.LENGTH_SHORT).show();
+                } else {
+                    DataSnapshot result = task.getResult();
+                    SportWithTeams sportWithTeams = null;
+
+                    if (result != null) {
+                        sportWithTeams = result.getValue(SportWithTeams.class);
+                    }
+
+                    boolean shouldSetValue = true;
+                    if (sportWithTeams == null) {
+                        sportWithTeams = new SportWithTeams();
+                        List<String> teams = new ArrayList<>();
+                        teams.add(currentTeam);
+
+                        sportWithTeams.setSport(currentSport);
+                        sportWithTeams.setTeams(teams);
                     } else {
 
-                        DataSnapshot result = task.getResult();
-                        Map<String, List<String>> sportWithTeams = new HashMap<>();
-                        if (result != null) {
-                            GenericTypeIndicator<Map<String, List<String>>> t = new GenericTypeIndicator<Map<String, List<String>>>() {
-                            };
-
-                            sportWithTeams = result.getValue(t);
-                        }
-
-                        boolean shouldSetValue = true;
-                        if (sportWithTeams == null) {
-                            sportWithTeams = new HashMap<>();
-                            List<String> teams = new ArrayList<>();
+                        List<String> teams = sportWithTeams.getTeams();
+                        if (teams == null) {
+                            teams = Collections.singletonList(currentTeam);
+                            sportWithTeams.setTeams(teams);
+                        } else if (teams.isEmpty()) {
                             teams.add(currentTeam);
-                            sportWithTeams.put(currentSport, teams);
                         } else {
-                            List<String> teams = sportWithTeams.get(currentSport);
-                            if (teams == null) {
-                                sportWithTeams.put(currentSport, Collections.singletonList(currentTeam));
-                            } else if (teams.isEmpty()) {
+                            if (!teams.contains(currentTeam)) {
                                 teams.add(currentTeam);
                             } else {
-                                if (!teams.contains(currentTeam)) {
-                                    teams.add(currentTeam);
-                                } else {
-                                    shouldSetValue = false;
-                                }
+                                shouldSetValue = false;
                             }
                         }
+                    }
 
-                        if (shouldSetValue) {
-                            sportWithTeamsReference.setValue(sportWithTeams).addOnCompleteListener(task1 -> {
-                                if (task1.isSuccessful()) {
-                                    addProduct();
-                                } else {
-                                    Toast.makeText(requireContext(), "Failed to add product", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            addProduct();
-                        }
+                    if (shouldSetValue) {
+                        sportWithTeamsReference.setValue(sportWithTeams).addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                addProduct();
+                            } else {
+                                Toast.makeText(requireContext(), "Failed to add product", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        addProduct();
                     }
                 }
             });
@@ -569,12 +562,12 @@ public class AddProductFragment extends Fragment {
     }
 
     private void addProduct() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin").child(SportifyAdminApp.admin.adminId);
-        DatabaseReference productsReference = databaseReference.child("Products");
+        DatabaseReference productsReference = Utils.getProductsReference();
         String productId = productsReference.push().getKey();
         DatabaseReference productReference = productsReference.child(productId);
         product.setProductId(productId);
         product.setCreatedAt(System.currentTimeMillis());
+        product.setAdminId(SportifyAdminApp.admin.adminId);
         productReference.setValue(product);
         requireActivity().finish();
     }

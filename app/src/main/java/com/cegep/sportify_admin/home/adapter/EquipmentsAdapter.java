@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cegep.sportify_admin.ItemClickListener;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.model.Equipment;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
