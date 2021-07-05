@@ -336,6 +336,10 @@ public class AddEquipmentFragment extends Fragment {
                 equipment.setEquipmentId(equipmentId);
                 equipment.setCreatedAt(System.currentTimeMillis());
                 equipment.setAdminId(SportifyAdminApp.admin.adminId);
+                if (equipment.isOnSale()) {
+                    float salePrice = equipment.getPrice() - ((equipment.getPrice() * equipment.getSale()) / 100);
+                    equipment.setSalePrice(salePrice);
+                }
                 productReference.setValue(equipment);
                 if (updateSports) {
                     SportWithTeams sportWithTeams = new SportWithTeams();

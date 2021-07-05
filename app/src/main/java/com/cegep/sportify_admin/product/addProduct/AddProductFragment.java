@@ -568,6 +568,10 @@ public class AddProductFragment extends Fragment {
         product.setProductId(productId);
         product.setCreatedAt(System.currentTimeMillis());
         product.setAdminId(SportifyAdminApp.admin.adminId);
+        if (product.isOnSale()) {
+            float salePrice = product.getPrice() - ((product.getPrice() * product.getSale()) / 100);
+            product.setSalePrice(salePrice);
+        }
         productReference.setValue(product);
         requireActivity().finish();
     }

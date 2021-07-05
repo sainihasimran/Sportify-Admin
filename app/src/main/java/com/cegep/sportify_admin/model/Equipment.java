@@ -15,6 +15,8 @@ public class Equipment {
 
     private float price = -1f;
 
+    private float salePrice;
+
     private int sale;
 
     private int stock;
@@ -67,6 +69,14 @@ public class Equipment {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public float getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(float salePrice) {
+        this.salePrice = salePrice;
     }
 
     public int getSale() {
@@ -159,5 +169,9 @@ public class Equipment {
 
     public boolean isOutOfStock() {
         return getStock() <= 0;
+    }
+
+    public boolean isOnSale() {
+        return sale > 0;
     }
 }

@@ -15,6 +15,8 @@ public class Product {
 
     private float price = -1f;
 
+    private float salePrice;
+
     private String sport;
 
     private String team;
@@ -92,6 +94,14 @@ public class Product {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public float getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(float salePrice) {
+        this.salePrice = salePrice;
     }
 
     public String getSport() {
@@ -276,5 +286,9 @@ public class Product {
 
     public boolean hasSport() {
         return !TextUtils.isEmpty(sport);
+    }
+
+    public boolean isOnSale() {
+        return sale > 0;
     }
 }
