@@ -20,8 +20,10 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.SportifyAdminApp;
+import com.cegep.sportify_admin.Utils;
 import com.cegep.sportify_admin.gallery.ImageAdapter;
 import com.cegep.sportify_admin.model.Equipment;
+import com.cegep.sportify_admin.model.SportWithTeams;
 import com.esafirm.imagepicker.features.ImagePickerConfig;
 import com.esafirm.imagepicker.features.ImagePickerLauncher;
 import com.esafirm.imagepicker.features.ImagePickerLauncherKt;
@@ -33,7 +35,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -42,6 +43,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
@@ -264,9 +266,9 @@ public class AddEquipmentFragment extends Fragment {
 
     private void pickImage() {
         ImagePickerConfig config = new ImagePickerConfig(ImagePickerMode.MULTIPLE, "Folder", "Tap to select", "DONE", 0, 4, 0, true, false, false,
-                false, false,
-                new ArrayList<>(), new ArrayList<>(), new ImagePickerSavePath("Camera", true),
-                ReturnMode.NONE, false, true);
+                                                         false, false,
+                                                         new ArrayList<>(), new ArrayList<>(), new ImagePickerSavePath("Camera", true),
+                                                         ReturnMode.NONE, false, true);
         imagepickerLauncher.launch(config);
 
     }
@@ -314,39 +316,36 @@ public class AddEquipmentFragment extends Fragment {
     }
 
     private void addEquipment() {
-        DatabaseReference sportsReference = FirebaseDatabase.getInstance().getReference().child("Sports");
+        String currentSport = equipment.getSport().toLowerCase();
+        DatabaseReference sportsReference = Utils.getSportWithTeamsReference().child(currentSport);
         sportsReference.get().addOnCompleteListener(task -> {
-            String currentSport = equipment.getSport().toLowerCase();
             if (!task.isSuccessful()) {
                 Toast.makeText(requireContext(), "Failed to add an equipment", Toast.LENGTH_SHORT).show();
             } else {
                 Object response = null;
                 DataSnapshot result = task.getResult();
-                if (result != null) {
+                if (result != null && result.getValue() != null) {
                     response = result.getValue();
                 }
 
-                List<String> sports = new ArrayList<>();
-                if (response != null) {
-                    sports = new ArrayList<>((List<String>) response);
-                }
+                boolean updateSports = response == null;
 
-                boolean updateSports = true;
-                if (sports.contains(currentSport)) {
-                    updateSports = false;
-                } else {
-                    sports.add(currentSport);
-                }
-
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin").child(SportifyAdminApp.admin.adminId);
-                DatabaseReference productsReference = databaseReference.child("Equipments");
-                String equipmentId = productsReference.push().getKey();
-                DatabaseReference productReference = productsReference.child(equipmentId);
+                DatabaseReference equipmentsReference = Utils.getEquipmentsReference();
+                String equipmentId = equipmentsReference.push().getKey();
+                DatabaseReference productReference = equipmentsReference.child(equipmentId);
                 equipment.setEquipmentId(equipmentId);
                 equipment.setCreatedAt(System.currentTimeMillis());
+                equipment.setAdminId(SportifyAdminApp.admin.adminId);
+                if (equipment.isOnSale()) {
+                    float salePrice = equipment.getPrice() - ((equipment.getPrice() * equipment.getSale()) / 100);
+                    equipment.setSalePrice(salePrice);
+                }
                 productReference.setValue(equipment);
                 if (updateSports) {
-                    sportsReference.setValue(sports);
+                    SportWithTeams sportWithTeams = new SportWithTeams();
+                    sportWithTeams.setSport(currentSport);
+                    sportWithTeams.setTeams(Collections.emptyList());
+                    sportsReference.setValue(sportWithTeams);
                 }
                 requireActivity().finish();
             }

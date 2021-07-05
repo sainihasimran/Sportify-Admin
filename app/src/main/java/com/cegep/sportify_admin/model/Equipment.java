@@ -15,6 +15,8 @@ public class Equipment {
 
     private float price = -1f;
 
+    private float salePrice;
+
     private int sale;
 
     private int stock;
@@ -24,6 +26,8 @@ public class Equipment {
     private String sport;
 
     private String description;
+
+    private String adminId;
 
     private List<String> images = new ArrayList<>();
 
@@ -67,6 +71,14 @@ public class Equipment {
         this.price = price;
     }
 
+    public float getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(float salePrice) {
+        this.salePrice = salePrice;
+    }
+
     public int getSale() {
         return sale;
     }
@@ -105,6 +117,14 @@ public class Equipment {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
     }
 
     public List<String> getImages() {
@@ -149,5 +169,9 @@ public class Equipment {
 
     public boolean isOutOfStock() {
         return getStock() <= 0;
+    }
+
+    public boolean isOnSale() {
+        return sale > 0;
     }
 }

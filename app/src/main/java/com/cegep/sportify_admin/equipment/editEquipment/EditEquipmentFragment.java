@@ -176,6 +176,10 @@ public class EditEquipmentFragment extends Fragment {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference productsReference = databaseReference.child("Admin").child(SportifyAdminApp.admin.adminId).child("Equipments");
         DatabaseReference productReference = productsReference.child(equipment.getEquipmentId());
+        if (equipment.isOnSale()) {
+            float salePrice = equipment.getPrice() - ((equipment.getPrice() * equipment.getSale()) / 100);
+            equipment.setSalePrice(salePrice);
+        }
         productReference.setValue(equipment);
         requireActivity().finish();
     }

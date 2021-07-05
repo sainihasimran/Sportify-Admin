@@ -15,6 +15,8 @@ public class Product {
 
     private float price = -1f;
 
+    private float salePrice;
+
     private String sport;
 
     private String team;
@@ -26,6 +28,8 @@ public class Product {
     private String subCategory;
 
     private String description;
+
+    private String adminId;
 
     private int xSmallSize = 0;
 
@@ -92,6 +96,14 @@ public class Product {
         this.price = price;
     }
 
+    public float getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(float salePrice) {
+        this.salePrice = salePrice;
+    }
+
     public String getSport() {
         return sport;
     }
@@ -138,6 +150,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
     }
 
     public int getxSmallSize() {
@@ -266,5 +286,9 @@ public class Product {
 
     public boolean hasSport() {
         return !TextUtils.isEmpty(sport);
+    }
+
+    public boolean isOnSale() {
+        return sale > 0;
     }
 }
