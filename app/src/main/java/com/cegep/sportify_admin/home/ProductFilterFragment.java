@@ -42,20 +42,16 @@ public class ProductFilterFragment extends BottomSheetDialogFragment {
     private void setupCategoriesSpinner(View view) {
         List<String> categories = new ArrayList<>(Arrays.asList(Constants.CATEGORIES));
         categories.add(0, "All");
-
         Spinner categoryChooser = view.findViewById(R.id.category_chooser);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
         categoryChooser.setAdapter(adapter);
-
         categoryChooser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 productFilter.setCategoryFilter(categories.get(position));
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -63,20 +59,16 @@ public class ProductFilterFragment extends BottomSheetDialogFragment {
     private void setupSubCategoriesSpinner(View view) {
         List<String> subcategories = new ArrayList<>(Arrays.asList(Constants.SUB_CATEGORIES));
         subcategories.add(0, "All");
-
         Spinner subCategoryChooser = view.findViewById(R.id.sub_category_chooser);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, subcategories);
         subCategoryChooser.setAdapter(adapter);
-
         subCategoryChooser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 productFilter.setSubCategoryFilter(subcategories.get(position));
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
