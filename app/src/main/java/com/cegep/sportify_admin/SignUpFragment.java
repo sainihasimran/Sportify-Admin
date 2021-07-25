@@ -89,15 +89,6 @@ public class SignUpFragment extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Admin");
 
-//        if(fauth.getCurrentUser() != null)
-//        {
-//            LoginFragment fragment2 = new LoginFragment();
-//            FragmentManager fragmentManager = getFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.fragment_container, fragment2);
-//            fragmentTransaction.commit();
-//
-//        }
 
         btnsign.setOnClickListener(new View.OnClickListener() {
             @Override

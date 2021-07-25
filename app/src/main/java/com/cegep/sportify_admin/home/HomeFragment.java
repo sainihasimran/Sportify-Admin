@@ -94,7 +94,6 @@ public class HomeFragment extends Fragment implements ProductFilterListener, Equ
         } else {
             filterFragment = new EquipmentFilterFragment();
         }
-
         filterFragment.setTargetFragment(this, 0);
         filterFragment.show(getParentFragmentManager(), null);
     }
