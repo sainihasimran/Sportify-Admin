@@ -6,6 +6,7 @@ public class Admin {
     public String brandname;
     public String email;
     public String image;
+    public String returnPolicyUrl;
 
     public Admin() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
