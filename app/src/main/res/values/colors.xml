@@ -9,7 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     
     <color name="grey">#cbcbcb</color>
-
+    <color name="faded_red">#d9534f</color>
     <color name="bordercolor">#03A9F4</color>
     <color name="buttonbg">#FFC107</color>
 
