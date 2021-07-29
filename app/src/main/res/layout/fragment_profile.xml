@@ -120,15 +120,16 @@
                     android:textColor="@color/black"
                     android:textSize="24sp" />
 
-                <TextView
+                <EditText
                     android:id="@+id/brandName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="Admin"
+                    android:hint="Brand Name"
                     android:textStyle="bold"
                     android:textColorHint="@color/black"
                     android:textSize="18sp" />
+
 
                 <View
                     android:layout_width="match_parent"
@@ -151,7 +152,7 @@
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
-                <TextView
+                <EditText
                     android:id="@+id/emailId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
