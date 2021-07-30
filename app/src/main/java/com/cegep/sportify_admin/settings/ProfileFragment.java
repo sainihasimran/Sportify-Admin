@@ -1,99 +1,127 @@
 package com.cegep.sportify_admin.settings;
 
-import android.app.ProgressDialog;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Selection;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-
-import com.bumptech.glide.Glide;
-
+import com.cegep.sportify_admin.Admin;
 import com.cegep.sportify_admin.LoginActivity;
-import com.cegep.sportify_admin.LoginFragment;
 import com.cegep.sportify_admin.R;
+import com.cegep.sportify_admin.SportifyAdminApp;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 public class ProfileFragment extends Fragment {
 
-    private FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
     ImageView userImage;
-    TextView emailId, brandName;
+    EditText emailId, brandName;
 
-    public ProfileFragment() {
-
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Admin");
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         userImage = view.findViewById(R.id.userImage);
-        emailId = view.findViewById(R.id.emailId);
-        brandName = view.findViewById(R.id.brandName);
-        Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
+        brandName = view.findViewById(R.id.brand_name_text);
+        emailId = view.findViewById(R.id.email_input_text);
 
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+        view.findViewById(R.id.update_btn).setOnClickListener(v -> validateUpdateAdmin());
+        view.findViewById(R.id.sign_out_btn).setOnClickListener(v -> onClick());
 
-                    String name = "" + dataSnapshot1.child("brandname").getValue();
-                    String emaill = "" + dataSnapshot1.child("email").getValue();
-                    String image = "" + dataSnapshot1.child("image").getValue();
-                    // setting data to our text view
-                    brandName.setText(name);
-                    emailId.setText(emaill);
-                    try {
-                        Glide.with(getActivity()).load(image).into(userImage);
-                    } catch (Exception e) {
+        userImage.setOnClickListener(new View.OnClickListener()   {
+            public void onClick(View v)     {
+                Log.v("flag", "1");
+                v.setSelected(true);
+            }
+        });
+        brandName.setText(SportifyAdminApp.admin.brandname);
+        emailId.setText(SportifyAdminApp.admin.email);
 
+        setSelection(brandName);
+        setSelection(emailId);
+    }
+
+    private void onClick() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(requireActivity(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        requireActivity().finish();
+    }
+
+
+    private void validateUpdateAdmin() {
+        Admin newadmin = new Admin(SportifyAdminApp.admin);
+
+        String brandname = brandName.getText().toString();
+        String email = emailId.getText().toString();
+
+        if (SportifyAdminApp.admin.brandname.equals(brandname) && SportifyAdminApp.admin.email.equals(email)) {
+            endUpdateAdmin();
+            return;
+        } else {
+            if (newadmin.email.equals(email)) {
+                newadmin.brandname = brandname;
+
+                updateAdmin(newadmin);
+            } else {
+                FirebaseAuth.getInstance().getCurrentUser().updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(requireContext(), "Sensitive operation performed. Please re-login", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        newadmin.brandname = brandname;
+                        newadmin.email = email;
+
+                        updateAdmin(newadmin);
                     }
-                }
+                });
             }
+        }
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        Button button = view.findViewById(R.id.sign_out_btn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(requireActivity(), LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                requireActivity().finish();
+    private void updateAdmin(Admin admin) {
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Admin").child(SportifyAdminApp.admin.adminId);
+        userReference.setValue(admin).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                SportifyAdminApp.admin = admin;
+                endUpdateAdmin();
+            } else {
+                Toast.makeText(requireContext(), "Failed to update profile", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-        return view;
+    private void endUpdateAdmin() {
+        requireActivity().finish();
+    }
+
+    private void setSelection(EditText editText) {
+        Selection.setSelection(editText.getText(), editText.length());
     }
 }
+
 
