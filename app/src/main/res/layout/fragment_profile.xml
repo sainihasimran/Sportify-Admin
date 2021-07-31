@@ -24,7 +24,7 @@
                 android:layout_height="120dp"
                 android:layout_margin="9dp"
                 android:adjustViewBounds="true"
-                android:background="@drawable/button_appearance"
+                android:background="@drawable/admin_logo"
                 android:padding="2dp"
                 android:scaleType="centerInside" />
 
