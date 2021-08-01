@@ -28,6 +28,13 @@ import java.util.List;
 public class PendingOrderFragment extends Fragment {
 
     private OrderAdapter orderAdapter;
+    private List<Order> orders = new ArrayList<>();
+    public List<Order> ordersdeclined = new ArrayList<>();
+    public List<Order> ordersAccepted = new ArrayList<>();
+    private TextView emptyView;
+
+    private Button btndelivered;
+    private Button btndeclined;
 
     public PendingOrderFragment() {
         // Required empty public constructor
@@ -36,7 +43,7 @@ public class PendingOrderFragment extends Fragment {
     private final ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            List<Order> orders = new ArrayList<>();
+
             for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
                 Order order = orderDatasnapshot.getValue(Order.class);
                 if (order != null && "pending".equals(order.getStatus())) {
@@ -55,9 +62,7 @@ public class PendingOrderFragment extends Fragment {
         public void onCancelled(@NonNull DatabaseError error) {
         }
     };
-    private TextView emptyView;
-    private Button btndelivered;
-    private Button btndeclined;
+
 
 
     @Override
@@ -72,6 +77,8 @@ public class PendingOrderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         emptyView = view.findViewById(R.id.empty_view);
+        btndelivered = view.findViewById(R.id.btnaccept);
+        btndeclined = view.findViewById(R.id.btndeclined);
 
 
         setupRecyclerView(view);
@@ -82,14 +89,14 @@ public class PendingOrderFragment extends Fragment {
         btndeclined.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                orderdeclined();
             }
         });
 
         btndelivered.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                      OrdersAccepted();
             }
         });
     }
@@ -102,4 +109,49 @@ public class PendingOrderFragment extends Fragment {
         recyclerView.setAdapter(orderAdapter);
     }
 
+    private void orderdeclined() {
+
+        final ValueEventListener ValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
+                    Order order = orderDatasnapshot.getValue(Order.class);
+                    if (order != null && "pending".equals(order.getStatus())) {
+                        ordersdeclined.add(order);
+                        orders.remove(order);
+                        order.setStatus("Cancelled");
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        };
+    }
+
+    private void OrdersAccepted() {
+
+        final ValueEventListener ValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
+                    Order order = orderDatasnapshot.getValue(Order.class);
+                    if (order != null && "pending".equals(order.getStatus())) {
+                        ordersAccepted.add(order);
+                        orders.remove(order);
+                        order.setStatus("Accepted");
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        };
+    }
 }

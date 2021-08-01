@@ -72,6 +72,7 @@
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/btnaccept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
@@ -81,6 +82,7 @@
             </Button>
 
             <Button
+                android:id="@+id/btndeclined"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"

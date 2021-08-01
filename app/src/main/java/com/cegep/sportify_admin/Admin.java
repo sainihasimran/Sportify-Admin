@@ -7,8 +7,8 @@ public class Admin {
     public String email;
     public String image;
 
-    public Admin() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    public Admin(){
+        //default constructor
     }
 
     public Admin(String email,String image) {
