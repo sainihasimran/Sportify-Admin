@@ -1,6 +1,5 @@
 package com.cegep.sportify_admin.settings;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Selection;
@@ -8,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -16,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.cegep.sportify_admin.Admin;
 import com.cegep.sportify_admin.LoginActivity;
 import com.cegep.sportify_admin.R;
@@ -23,13 +22,22 @@ import com.cegep.sportify_admin.SportifyAdminApp;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProfileFragment extends Fragment {
 
     ImageView userImage;
     EditText emailId, brandName;
+    private FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     @Nullable
     @Override
@@ -40,20 +48,43 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Admin");
 
         userImage = view.findViewById(R.id.userImage);
         brandName = view.findViewById(R.id.brand_name_text);
         emailId = view.findViewById(R.id.email_input_text);
 
+        Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+
+                    String image = "" + dataSnapshot1.child("image").getValue();
+
+                    try {
+                        Glide.with(getActivity()).load(image).into(userImage);
+                    } catch (Exception e) {
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+
         view.findViewById(R.id.update_btn).setOnClickListener(v -> validateUpdateAdmin());
         view.findViewById(R.id.sign_out_btn).setOnClickListener(v -> onClick());
 
-        userImage.setOnClickListener(new View.OnClickListener()   {
-            public void onClick(View v)     {
-                Log.v("flag", "1");
-                v.setSelected(true);
-            }
-        });
         brandName.setText(SportifyAdminApp.admin.brandname);
         emailId.setText(SportifyAdminApp.admin.email);
 
