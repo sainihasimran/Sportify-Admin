@@ -17,4 +17,10 @@ public class Admin {
         this.email = email;
         this.image = image;
     }
+
+    public Admin(Admin admin) {
+        this.brandname = admin.brandname;
+        this.email = admin.email;
+        this.image = admin.image;
+    }
 }
