@@ -13,16 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cegep.sportify_admin.ItemClickListener;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.SportifyAdminApp;
+import com.cegep.sportify_admin.Utils;
 import com.cegep.sportify_admin.equipment.addEquipment.AddEquipmentActivity;
 import com.cegep.sportify_admin.equipment.editEquipment.EditEquipmentActivity;
 import com.cegep.sportify_admin.home.adapter.EquipmentsAdapter;
 import com.cegep.sportify_admin.model.Equipment;
 import com.cegep.sportify_admin.model.EquipmentFilter;
-import com.cegep.sportify_admin.product.editProduct.EditProductActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -73,9 +72,8 @@ public class EquipmentsListFragment extends Fragment implements ItemClickListene
         emptyView = view.findViewById(R.id.empty_view);
 
         setupRecyclerView(view);
-        // TODO: 2021-06-23 Add equipment id
-        DatabaseReference equipmentsReference = FirebaseDatabase.getInstance().getReference("Admin").child(SportifyAdminApp.admin.adminId).child("Equipments");
-        equipmentsReference.addValueEventListener(valueEventListener);
+        Query query = Utils.getEquipmentsReference().orderByChild("adminId").equalTo(SportifyAdminApp.admin.adminId);
+        query.addValueEventListener(valueEventListener);
 
         view.findViewById(R.id.add_equipment_button).setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), AddEquipmentActivity.class);

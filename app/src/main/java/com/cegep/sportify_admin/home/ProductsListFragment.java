@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cegep.sportify_admin.ItemClickListener;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.SportifyAdminApp;
+import com.cegep.sportify_admin.Utils;
 import com.cegep.sportify_admin.home.adapter.ProductsAdapter;
 import com.cegep.sportify_admin.model.Product;
 import com.cegep.sportify_admin.model.ProductFilter;
@@ -20,8 +21,7 @@ import com.cegep.sportify_admin.product.addProduct.AddProductActivity;
 import com.cegep.sportify_admin.product.editProduct.EditProductActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -72,10 +72,9 @@ public class ProductsListFragment extends Fragment implements ItemClickListener<
         emptyView = view.findViewById(R.id.empty_view);
 
         setupRecyclerView(view);
-        // TODO: 2021-06-23 Add product id
-        DatabaseReference productsReference = FirebaseDatabase.getInstance().getReference("Admin").child(SportifyAdminApp.admin.adminId)
-                .child("Products");
-        productsReference.addValueEventListener(valueEventListener);
+
+        Query query = Utils.getProductsReference().orderByChild("adminId").equalTo(SportifyAdminApp.admin.adminId);
+        query.addValueEventListener(valueEventListener);
 
         view.findViewById(R.id.add_product_button).setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), AddProductActivity.class);

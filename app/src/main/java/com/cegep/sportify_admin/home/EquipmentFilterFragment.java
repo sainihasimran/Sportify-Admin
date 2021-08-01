@@ -8,15 +8,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.cegep.sportify_admin.R;
+import com.cegep.sportify_admin.Utils;
 import com.cegep.sportify_admin.model.EquipmentFilter;
+import com.cegep.sportify_admin.model.SportWithTeams;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,24 +44,28 @@ public class EquipmentFilterFragment extends BottomSheetDialogFragment {
     private void setupSportChooser(View view) {
         Spinner sportsChooser = view.findViewById(R.id.sport_chooser);
         final List<String> sports = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference("Brand").child("Sports").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Toast.makeText(requireContext(), "Failed to load filters", Toast.LENGTH_SHORT).show();
-            } else {
-                DataSnapshot result = task.getResult();
-                if (result != null) {
-                    Object value = result.getValue();
-                    if (value instanceof List) {
-                        List<String> remoteSports = new ArrayList<>((List<String>) value);
-                        for (String remoteSport : remoteSports) {
-                            sports.add(Character.toUpperCase(remoteSport.charAt(0)) + remoteSport.substring(1));
-                        }
-                    }
+        Utils.getSportWithTeamsReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<SportWithTeams> sportWithTeamsList = new ArrayList<>();
+                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                    SportWithTeams sportWithTeams = childSnapshot.getValue(SportWithTeams.class);
+                    sportWithTeamsList.add(sportWithTeams);
+                }
+
+                for (SportWithTeams sportWithTeams : sportWithTeamsList) {
+                    String remoteSport = sportWithTeams.getSport();
+                    sports.add(Character.toUpperCase(remoteSport.charAt(0)) + remoteSport.substring(1));
                 }
 
                 sports.add(0, "All");
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, sports);
                 sportsChooser.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
