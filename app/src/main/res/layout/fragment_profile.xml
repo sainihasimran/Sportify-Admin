@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/circle_border">
 
             <ImageView
@@ -24,8 +24,8 @@
                 android:layout_height="120dp"
                 android:layout_margin="9dp"
                 android:adjustViewBounds="true"
-                android:background="@drawable/circle"
-                android:padding="3dp"
+                android:background="@drawable/admin_logo"
+                android:padding="2dp"
                 android:scaleType="centerInside" />
 
         </RelativeLayout>
@@ -38,7 +38,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15sp"
             android:fontFamily="sans-serif-light"
-            android:text="Admin Details"
+            android:text="Admin Profile"
             android:textColor="@color/black"
             android:textSize="32sp" />
 
@@ -111,30 +111,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Brand Name"
-                    android:textColor="@color/black"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/brandName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="Admin"
-                    android:textStyle="bold"
-                    android:textColorHint="@color/black"
-                    android:textSize="18sp" />
-
-                <View
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/brand_name_input"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@color/black" />
+                    android:layout_height="wrap_content"
+                    android:hint="BrandName">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/brand_name_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -144,22 +137,36 @@
                 android:layout_marginTop="15dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                       <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/email_input"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Email"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:hint="BrandName">
 
-                <TextView
-                    android:id="@+id/emailId"
-                    android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/email_input_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/black" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/update_btn"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:hint="EmailId@gmail.com"
-                    android:textStyle="bold"
-                    android:textColorHint="@color/black"
-                    android:textSize="18sp" />
+                    android:layout_marginTop="@dimen/size_xl"
+                    android:text="UPDATE ADMIN DETAILS"/>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -176,8 +183,6 @@
 
             </LinearLayout>
 
-
-        </LinearLayout>
 
     </RelativeLayout>
 
