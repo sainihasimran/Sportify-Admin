@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.SportifyAdminApp;
+import com.cegep.sportify_admin.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,16 +26,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PendingOrderFragment extends Fragment {
+public class PendingOrderFragment extends Fragment implements OrderItemClickListener {
 
     private OrderAdapter orderAdapter;
     private List<Order> orders = new ArrayList<>();
-    public List<Order> ordersdeclined = new ArrayList<>();
-    public List<Order> ordersAccepted = new ArrayList<>();
     private TextView emptyView;
 
-    private Button btndelivered;
-    private Button btncancel;
 
     public PendingOrderFragment() {
         // Required empty public constructor
@@ -43,19 +40,21 @@ public class PendingOrderFragment extends Fragment {
     private final ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+             List<Order> orders = new ArrayList<>();
             for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
                 Order order = orderDatasnapshot.getValue(Order.class);
                 if (order != null && "pending".equals(order.getStatus())) {
                     orders.add(order);
                 }
             }
+
             if (orders.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
             } else {
                 emptyView.setVisibility(View.GONE);
             }
             orderAdapter.update(orders);
+
         }
 
         @Override
@@ -77,28 +76,14 @@ public class PendingOrderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         emptyView = view.findViewById(R.id.empty_view);
-        btndelivered = view.findViewById(R.id.btnaccept);
-        btncancel = view.findViewById(R.id.btndeclined);
-
 
         setupRecyclerView(view);
 
-        Query query = FirebaseDatabase.getInstance().getReference("Orders").orderByChild("adminId").equalTo(SportifyAdminApp.admin.adminId);
+        FirebaseDatabase clientapdb = Utils.getClientDatabase();
+
+        Query query = clientapdb.getReference("Orders").orderByChild("adminId").equalTo(SportifyAdminApp.admin.adminId);
         query.addValueEventListener(valueEventListener);
 
-//        btncancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                orderdeclined();
-//            }
-//        });
-//
-//        btndelivered.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                      OrdersAccepted();
-//            }
-//        });
     }
 
     private void setupRecyclerView(View view) {
@@ -109,49 +94,25 @@ public class PendingOrderFragment extends Fragment {
         recyclerView.setAdapter(orderAdapter);
     }
 
-    private void orderdeclined() {
 
-        final ValueEventListener ValueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
-                    Order order = orderDatasnapshot.getValue(Order.class);
-                    if (order != null && "pending".equals(order.getStatus())) {
-                        ordersdeclined.add(order);
-                        orders.remove(order);
-                        order.setStatus("Cancelled");
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+    @Override
+    public void btndeclinedonClick(Order order, boolean declined) {
 
-        };
+        if(declined){
+            //ordersdeclined.add(order.getOrderId());
+            order.setStatus("Cancelled");
+        }
+
     }
 
-    private void OrdersAccepted() {
+    @Override
+    public void btnacceptedonClick(Order order, boolean accept) {
 
-        final ValueEventListener ValueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        if(accept){
+            order.setStatus("Accepted");
+        }
 
-                for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
-                    Order order = orderDatasnapshot.getValue(Order.class);
-                    if (order != null && "pending".equals(order.getStatus())) {
-                        ordersAccepted.add(order);
-                        orders.remove(order);
-                        order.setStatus("Accepted");
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-        };
     }
 }

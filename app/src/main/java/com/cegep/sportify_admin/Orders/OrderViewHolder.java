@@ -2,6 +2,7 @@ package com.cegep.sportify_admin.Orders;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.cegep.sportify_admin.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderViewHolder extends RecyclerView.ViewHolder {
@@ -20,6 +22,8 @@ public class OrderViewHolder extends RecyclerView.ViewHolder {
     private final TextView OrderPrice;
     private final TextView OrderQuantity;
     private final TextView Status;
+    private  final Button btndelivered;
+    private  final Button btncancel;
 
     public OrderViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -29,10 +33,14 @@ public class OrderViewHolder extends RecyclerView.ViewHolder {
         OrderPrice = itemView.findViewById(R.id.item_price);
         OrderQuantity = itemView.findViewById(R.id.Quantity);
         Status = itemView.findViewById(R.id.Status);
+        btndelivered = itemView.findViewById(R.id.btnaccept);
+        btncancel = itemView.findViewById(R.id.btndeclined);
     }
 
     void bind(Order order, Context context) {
 
+         List<Order> ordersdeclined ;
+         List<Order> ordersAccepted ;
         List<String> images;
         if (order.getProduct() != null) {
             images = order.getProduct().getImages();
@@ -64,6 +72,8 @@ public class OrderViewHolder extends RecyclerView.ViewHolder {
         if (order.getStatus().equals("pending")) {
             Status.setTextColor(itemView.getResources().getColor(R.color.buttonbg));
         }
+
+
     }
 
 
