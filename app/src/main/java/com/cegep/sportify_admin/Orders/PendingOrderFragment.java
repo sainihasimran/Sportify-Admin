@@ -34,7 +34,7 @@ public class PendingOrderFragment extends Fragment {
     private TextView emptyView;
 
     private Button btndelivered;
-    private Button btndeclined;
+    private Button btncancel;
 
     public PendingOrderFragment() {
         // Required empty public constructor
@@ -78,7 +78,7 @@ public class PendingOrderFragment extends Fragment {
 
         emptyView = view.findViewById(R.id.empty_view);
         btndelivered = view.findViewById(R.id.btnaccept);
-        btndeclined = view.findViewById(R.id.btndeclined);
+        btncancel = view.findViewById(R.id.btndeclined);
 
 
         setupRecyclerView(view);
@@ -86,19 +86,19 @@ public class PendingOrderFragment extends Fragment {
         Query query = FirebaseDatabase.getInstance().getReference("Orders").orderByChild("adminId").equalTo(SportifyAdminApp.admin.adminId);
         query.addValueEventListener(valueEventListener);
 
-        btndeclined.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                orderdeclined();
-            }
-        });
-
-        btndelivered.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                      OrdersAccepted();
-            }
-        });
+//        btncancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                orderdeclined();
+//            }
+//        });
+//
+//        btndelivered.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                      OrdersAccepted();
+//            }
+//        });
     }
 
     private void setupRecyclerView(View view) {

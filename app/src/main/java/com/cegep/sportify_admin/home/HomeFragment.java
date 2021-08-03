@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+
+import com.cegep.sportify_admin.Orders.OrdersActivity;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.model.EquipmentFilter;
 import com.cegep.sportify_admin.model.ProductFilter;
@@ -63,6 +65,10 @@ public class HomeFragment extends Fragment implements ProductFilterListener, Equ
                 return true;
             } else if (item.getItemId() == R.id.action_profile) {
                 Intent intent = new Intent(requireContext(), ProfileActivity.class);
+                startActivity(intent);
+                return true;
+            }else if (item.getItemId() == R.id.action_order) {
+                Intent intent = new Intent(requireContext(), OrdersActivity.class);
                 startActivity(intent);
                 return true;
             }

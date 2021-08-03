@@ -14,5 +14,10 @@
         android:enabled="true"
         android:icon="@drawable/ic_person"
         android:title="@string/profile" />
+    <item
+        android:id="@+id/action_order"
+        android:enabled="true"
+        android:icon="@drawable/ic_person"
+        android:title="Orders" />
 
 </menu>
