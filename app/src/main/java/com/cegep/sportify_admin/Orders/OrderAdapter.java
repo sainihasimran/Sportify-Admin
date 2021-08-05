@@ -101,8 +101,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         }
 
 
-
-
         btndelivered.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
