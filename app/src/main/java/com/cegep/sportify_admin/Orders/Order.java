@@ -1,5 +1,7 @@
 package com.cegep.sportify_admin.Orders;
 
+import android.location.Address;
+
 import com.cegep.sportify_admin.model.Equipment;
 import com.cegep.sportify_admin.model.Product;
 
@@ -8,8 +10,6 @@ import java.util.List;
 public class Order {
 
     private String orderId;
-
-    private long createdAt;
 
     private Product product;
 
@@ -31,6 +31,8 @@ public class Order {
 
     private String status;
 
+    private Address address;
+
     private List<String> images;
 
     public String getOrderId() {
@@ -39,14 +41,6 @@ public class Order {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
-    }
-
-    public long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(long createdAt) {
-        this.createdAt = createdAt;
     }
 
     public Product getProduct() {
@@ -127,6 +121,14 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public  List<String> getImages() { return images;
