@@ -37,24 +37,32 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
     @Override
-    public OrderAdapter.ViewHolder  onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OrderAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.order_item, parent, false);
         return new OrderAdapter.ViewHolder(view);
     }
 
 
-
     @Override
     public void onBindViewHolder(@NonNull OrderAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        ImageView OrderImage= holder.OrderImage;
-        TextView OrderName=holder.OrderName;
-        TextView OrderPrice= holder.OrderPrice;
-        TextView OrderQuantity= holder.OrderQuantity;
-        TextView Status= holder.Status;
-        Button btndelivered= holder.btndelivered;
-        Button btncancel= holder.btncancel;
+        ImageView OrderImage = holder.OrderImage;
+        TextView OrderName = holder.OrderName;
+        TextView OrderPrice = holder.OrderPrice;
+        TextView OrderQuantity = holder.OrderQuantity;
+        TextView Status = holder.Status;
+        Button btndelivered = holder.btndelivered;
+        Button btncancel = holder.btncancel;
+
+
+        if (orders.get(0).getStatus().equals("pending")) {
+            btndelivered.setVisibility(View.VISIBLE);
+            btncancel.setVisibility(View.VISIBLE);
+        } else {
+            btndelivered.setVisibility(View.GONE);
+            btncancel.setVisibility(View.GONE);
+        }
 
         List<String> images;
         if (orders.get(position).getProduct() != null) {
@@ -68,25 +76,31 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                     .load(images.get(0))
                     .error(R.drawable.no_image_bg)
                     .into(OrderImage);
-        }  else {
+        } else {
             OrderImage.setImageResource(R.drawable.no_image_bg);
         }
 
         if (orders.get(position).getProduct() != null) {
             OrderName.setText(orders.get(position).getProduct().getProductName());
             OrderPrice.setText("$" + String.format("%.2f", orders.get(position).getPrice()));
-            OrderQuantity.setText("Quantity: "+ orders.get(position).getQuantity());
+            OrderQuantity.setText("Quantity: " + orders.get(position).getQuantity());
             Status.setText(Character.toUpperCase(orders.get(position).getStatus().charAt(0)) + orders.get(position).getStatus().substring(1));
         } else {
             OrderName.setText(orders.get(position).getEquipment().getEquipmentName());
             OrderPrice.setText("$" + String.format("%.2f", orders.get(position).getPrice()));
-            OrderQuantity.setText("Quantity: "+ orders.get(position).getQuantity());
+            OrderQuantity.setText("Quantity: " + orders.get(position).getQuantity());
             Status.setText(Character.toUpperCase(orders.get(position).getStatus().charAt(0)) + orders.get(position).getStatus().substring(1));
         }
 
         if (orders.get(position).getStatus().equals("pending")) {
             Status.setTextColor(context.getResources().getColor(R.color.buttonbg));
+        } else if (orders.get(position).getStatus().equals("Accepted")) {
+            Status.setTextColor(context.getResources().getColor(R.color.green));
+        } else {
+            Status.setTextColor(context.getResources().getColor(R.color.faded_red));
         }
+
+
 
 
         btndelivered.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +114,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
                         String status = (String) dataSnapshot.getValue();
 
                         databaseReference.setValue("Accepted");
@@ -108,7 +123,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                         notifyItemRangeChanged(position,orders.size());
 
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -135,8 +149,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position,orders.size());
 
-
-
                     }
 
                     @Override
@@ -147,9 +159,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             }
         });
     }
-
-
-
 
 
     @Override

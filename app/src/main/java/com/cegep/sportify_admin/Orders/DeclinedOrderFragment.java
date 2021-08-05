@@ -15,17 +15,51 @@ import android.widget.TextView;
 
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.Orders.PendingOrderFragment;
+import com.cegep.sportify_admin.SportifyAdminApp;
+import com.cegep.sportify_admin.Utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DeclinedOrderFragment extends Fragment {
 
-    private OrderAdapter orderDeclinedAdapter;
+    private OrderAdapter orderAdapter;
+    private List<Order> orders = new ArrayList<>();
     private TextView emptyView;
 
     public DeclinedOrderFragment() {
         // Required empty public constructor
     }
+
+    private final ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            List<Order> orders = new ArrayList<>();
+            for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
+                Order order = orderDatasnapshot.getValue(Order.class);
+                if (order != null && "Declined".equals(order.getStatus())) {
+                    orders.add(order);
+                }
+            }
+
+            if (orders.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+            }
+            orderAdapter.update(orders);
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,14 +75,17 @@ public class DeclinedOrderFragment extends Fragment {
 
         setupRecyclerView(view);
 
+        FirebaseDatabase clientapdb = Utils.getClientDatabase();
 
+        Query query = clientapdb.getReference("Orders").orderByChild("adminId").equalTo(SportifyAdminApp.admin.adminId);
+        query.addValueEventListener(valueEventListener);
     }
 
     private void setupRecyclerView(View view) {
-        orderDeclinedAdapter = new OrderAdapter(requireContext(), new ArrayList<>());
+        orderAdapter = new OrderAdapter(requireContext(), new ArrayList<>());
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recyclerView.setAdapter(orderDeclinedAdapter);
+        recyclerView.setAdapter(orderAdapter);
     }
 }
