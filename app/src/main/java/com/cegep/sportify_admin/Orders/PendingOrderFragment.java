@@ -26,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PendingOrderFragment extends Fragment implements OrderItemClickListener {
+public class PendingOrderFragment extends Fragment  {
 
     private OrderAdapter orderAdapter;
     private List<Order> orders = new ArrayList<>();
@@ -96,23 +96,4 @@ public class PendingOrderFragment extends Fragment implements OrderItemClickList
 
 
 
-
-    @Override
-    public void btndeclinedonClick(Order order, boolean declined) {
-
-        if(declined){
-            //ordersdeclined.add(order.getOrderId());
-            order.setStatus("Cancelled");
-        }
-
-    }
-
-    @Override
-    public void btnacceptedonClick(Order order, boolean accept) {
-
-        if(accept){
-            order.setStatus("Accepted");
-        }
-
-    }
 }
