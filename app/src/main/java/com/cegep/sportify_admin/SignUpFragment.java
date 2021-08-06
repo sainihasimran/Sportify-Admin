@@ -63,7 +63,7 @@ public class SignUpFragment extends Fragment {
     private ImagePickerLauncher imagepickerLauncher = null;
 
     Button btnsign;
-    TextInputLayout txtmail, txtpswd, brandname,txtcpswd;
+    TextInputLayout txtmail, txtpswd, brandname,txtcpswd,returnPolicyEditText;
     TextView tvlogin;
     String stringpath;
     ImageView img;
@@ -82,7 +82,7 @@ public class SignUpFragment extends Fragment {
         txtpswd = (TextInputLayout) view.findViewById(R.id.pwd);
         txtcpswd = (TextInputLayout) view.findViewById(R.id.cnfpwd);
         img = (ImageView) view.findViewById(R.id.imgsignup);
-        EditText returnPolicyEditText = view.findViewById(R.id.return_policy_url);
+        returnPolicyEditText = view.findViewById(R.id.return_policy_url);
 
         fauth = FirebaseAuth.getInstance();
 
@@ -239,9 +239,11 @@ public class SignUpFragment extends Fragment {
         String bname = brandname.getEditText().getText().toString();
         String adminId = mDatabase.push().getKey();
         String email = txtmail.getEditText().getText().toString();
+        String returnPolicyUrl = returnPolicyEditText.getEditText().toString();
         Admin admin = new Admin(email,stringpath);
         admin.adminId = adminId;
         admin.brandname = bname;
+        admin.returnPolicyUrl = returnPolicyUrl;
         SportifyAdminApp.admin = admin;
         mDatabase.child(adminId).setValue(admin);
 
