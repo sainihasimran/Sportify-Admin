@@ -63,7 +63,8 @@ public class SignUpFragment extends Fragment {
     private ImagePickerLauncher imagepickerLauncher = null;
 
     Button btnsign;
-    TextInputLayout txtmail, txtpswd, brandname,txtcpswd,returnPolicyEditText;
+    TextInputLayout txtmail, txtpswd, brandname,txtcpswd;
+    EditText returnPolicyEditText;
     TextView tvlogin;
     String stringpath;
     ImageView img;
@@ -239,7 +240,7 @@ public class SignUpFragment extends Fragment {
         String bname = brandname.getEditText().getText().toString();
         String adminId = mDatabase.push().getKey();
         String email = txtmail.getEditText().getText().toString();
-        String returnPolicyUrl = returnPolicyEditText.getEditText().toString();
+        String returnPolicyUrl = returnPolicyEditText.getText().toString();
         Admin admin = new Admin(email,stringpath);
         admin.adminId = adminId;
         admin.brandname = bname;
