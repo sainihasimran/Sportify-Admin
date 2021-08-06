@@ -65,7 +65,6 @@ public class SignUpFragment extends Fragment {
     Button btnsign;
     TextInputLayout txtmail, txtpswd, brandname,txtcpswd;
     TextView tvlogin;
-    ProgressBar bar;
     String stringpath;
     ImageView img;
     FirebaseAuth fauth;
@@ -82,8 +81,8 @@ public class SignUpFragment extends Fragment {
         txtmail = (TextInputLayout) view.findViewById(R.id.email);
         txtpswd = (TextInputLayout) view.findViewById(R.id.pwd);
         txtcpswd = (TextInputLayout) view.findViewById(R.id.cnfpwd);
-        bar = (ProgressBar) view.findViewById(R.id.progressBar3);
         img = (ImageView) view.findViewById(R.id.imgsignup);
+        EditText returnPolicyEditText = view.findViewById(R.id.return_policy_url);
 
         fauth = FirebaseAuth.getInstance();
 
@@ -94,46 +93,47 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                bar.setVisibility(View.VISIBLE);
 
                 String email = txtmail.getEditText().getText().toString();
                 String password = txtpswd.getEditText().getText().toString();
                 String cpassword = txtcpswd.getEditText().getText().toString();
                 String bname = brandname.getEditText().getText().toString();
+                String returnPolicy = returnPolicyEditText.getText().toString();
 //
                 if (bname.isEmpty() == true)
                 {
-                    bar.setVisibility(View.INVISIBLE);
                     brandname.setError("Brand name field is empty!");
                 }
                 else if(TextUtils.isEmpty(email))
                 {
-                    bar.setVisibility(View.INVISIBLE);
                     txtmail.setError("Email is Required.");
                 }
 
                 else if(TextUtils.isEmpty(password))
                 {
-                    bar.setVisibility(View.INVISIBLE);
                     txtpswd.setError("Password is Required.");
                 }
 
                 else if(password.length()<9) {
-                    bar.setVisibility(View.INVISIBLE);
                     txtpswd.setError("Length of password is not less than 9.");
                 }
                 else if(!password.equals(cpassword)){
-                    bar.setVisibility(View.INVISIBLE);
                     txtcpswd.setError("Password not matched!");
+                } else if (TextUtils.isEmpty(returnPolicy) || !returnPolicy.startsWith("http") || !returnPolicy.contains("www.")) {
+                    returnPolicyEditText.setError("Please enter valid url");
                 } else {
-                    fauth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    brandname.setError(null);
+                    txtmail.setError(null);
+                    txtpswd.setError(null);
+                    txtcpswd.setError(null);
+                    returnPolicyEditText.setError(null);
+
+                    fauth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 uploadImage();
-                                bar.setVisibility(View.INVISIBLE);
                             } else {
-                                bar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(getActivity(), "Registeration Failed", Toast.LENGTH_SHORT).show();
                             }
                         }
