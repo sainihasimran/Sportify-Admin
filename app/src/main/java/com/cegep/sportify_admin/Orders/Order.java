@@ -6,9 +6,11 @@ import com.cegep.sportify_admin.model.Product;
 
 import java.util.List;
 
-public class Order {
+public class Order implements Comparable<Order> {
 
     private String orderId;
+
+    private long createdAt;
 
     private Product product;
 
@@ -40,6 +42,14 @@ public class Order {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Product getProduct() {
@@ -134,5 +144,10 @@ public class Order {
     }
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    @Override
+    public int compareTo(Order o) {
+        return Long.compare(createdAt, o.createdAt);
     }
 }

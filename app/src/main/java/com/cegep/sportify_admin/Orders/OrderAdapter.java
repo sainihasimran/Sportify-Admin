@@ -21,16 +21,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
 
     private final Context context;
 
-    private List<Order> orders;
+    private final List<Order> orders;
 
     public OrderAdapter(Context context, List<Order> orders) {
+        Collections.sort(orders);
+        Collections.reverse(orders);
         this.context = context;
         this.orders = orders;
     }
@@ -248,8 +252,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
     public void update(Collection<Order> orders) {
+        List<Order> newOrders = new ArrayList<>(orders);
+        Collections.sort(newOrders);
+        Collections.reverse(newOrders);
+
         this.orders.clear();
-        this.orders.addAll(orders);
+        this.orders.addAll(newOrders);
         notifyDataSetChanged();
     }
 }
