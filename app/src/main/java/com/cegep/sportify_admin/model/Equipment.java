@@ -7,7 +7,7 @@ import com.cegep.sportify_admin.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Equipment {
+public class Equipment implements Comparable<Equipment> {
 
     private String equipmentId;
 
@@ -175,5 +175,10 @@ public class Equipment {
 
     public boolean isOnSale() {
         return sale > 0;
+    }
+
+    @Override
+    public int compareTo(Equipment o) {
+        return Long.compare(createdAt, o.createdAt);
     }
 }

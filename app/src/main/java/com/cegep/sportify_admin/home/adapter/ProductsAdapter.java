@@ -11,6 +11,7 @@ import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.model.Product;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductViewHolder> {
@@ -44,8 +45,12 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     }
 
     public void update(Collection<Product> products) {
+        List<Product> newProducts = new ArrayList<>(products);
+        Collections.sort(newProducts);
+        Collections.reverse(newProducts);
+
         this.products.clear();
-        this.products.addAll(products);
+        this.products.addAll(newProducts);
         notifyDataSetChanged();
     }
 }

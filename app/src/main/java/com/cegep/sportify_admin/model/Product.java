@@ -7,7 +7,7 @@ import com.cegep.sportify_admin.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product {
+public class Product implements Comparable<Product> {
 
     private String productId;
 
@@ -291,5 +291,10 @@ public class Product {
 
     public boolean isOnSale() {
         return sale > 0;
+    }
+
+    @Override
+    public int compareTo(Product o) {
+        return Long.compare(createdAt, o.createdAt);
     }
 }

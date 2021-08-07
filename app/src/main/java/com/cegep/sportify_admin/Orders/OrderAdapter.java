@@ -119,7 +119,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String stock_inefficient_to_fulfil_order = "Inefficient stock to fulfil order";
+                    String stock_inefficient_to_fulfil_order = "Inefficient stock to fulfill order";
                     if (isProduct) {
                         Product product = snapshot.getValue(Product.class);
                         if (product == null || product.isOutOfStock()) {

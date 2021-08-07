@@ -11,6 +11,7 @@ import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.model.Equipment;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class EquipmentsAdapter extends RecyclerView.Adapter<EquipmentViewHolder> {
@@ -44,8 +45,12 @@ public class EquipmentsAdapter extends RecyclerView.Adapter<EquipmentViewHolder>
     }
 
     public void update(Collection<Equipment> equipments) {
+        List<Equipment> newEquipments = new ArrayList<>(equipments);
+        Collections.sort(newEquipments);
+        Collections.reverse(newEquipments);
+
         this.equipments.clear();
-        this.equipments.addAll(equipments);
+        this.equipments.addAll(newEquipments);
         notifyDataSetChanged();
     }
 }
