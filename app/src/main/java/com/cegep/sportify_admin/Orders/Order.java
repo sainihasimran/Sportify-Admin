@@ -1,7 +1,6 @@
 package com.cegep.sportify_admin.Orders;
 
-import android.location.Address;
-
+import com.cegep.sportify_admin.model.Address;
 import com.cegep.sportify_admin.model.Equipment;
 import com.cegep.sportify_admin.model.Product;
 

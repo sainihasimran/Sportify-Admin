@@ -42,7 +42,7 @@ public class DeclinedOrderFragment extends Fragment {
             List<Order> orders = new ArrayList<>();
             for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
                 Order order = orderDatasnapshot.getValue(Order.class);
-                if (order != null && "Declined".equals(order.getStatus())) {
+                if (order != null && "Declined".equalsIgnoreCase(order.getStatus())) {
                     orders.add(order);
                 }
             }

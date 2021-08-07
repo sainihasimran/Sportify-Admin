@@ -43,7 +43,7 @@ public class PendingOrderFragment extends Fragment  {
              List<Order> orders = new ArrayList<>();
             for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
                 Order order = orderDatasnapshot.getValue(Order.class);
-                if (order != null && "pending".equals(order.getStatus())) {
+                if (order != null && "pending".equalsIgnoreCase(order.getStatus())) {
                     orders.add(order);
                 }
             }
