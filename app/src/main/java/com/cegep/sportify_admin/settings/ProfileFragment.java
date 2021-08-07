@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment {
                     String image = "" + dataSnapshot1.child("image").getValue();
 
                     try {
-                        Glide.with(getActivity()).load(image).into(userImage);
+                        Glide.with(getActivity()).load(image).error(R.drawable.admin_logo).into(userImage);
                     } catch (Exception e) {
 
                     }

@@ -51,17 +51,18 @@ public class Product {
 
     }
 
-    //copy constructor
     public Product(Product other) {
         this.productId = other.productId;
         this.productName = other.productName;
         this.price = other.price;
+        this.salePrice = other.salePrice;
         this.sport = other.sport;
         this.team = other.team;
         this.sale = other.sale;
         this.category = other.category;
         this.subCategory = other.subCategory;
         this.description = other.description;
+        this.adminId = other.adminId;
         this.xSmallSize = other.xSmallSize;
         this.smallSize = other.smallSize;
         this.mediumSize = other.mediumSize;

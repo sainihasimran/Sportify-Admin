@@ -91,9 +91,7 @@ public class LoginFragment extends Fragment {
     private void doSignin(String email, String pass)
     {
         firebaseAuth.signInWithEmailAndPassword(email, pass)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                .addOnCompleteListener(getActivity(), task -> {
                         if (task.isSuccessful()) {
                             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -129,7 +127,6 @@ public class LoginFragment extends Fragment {
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(), "Authenticate Failed!", Toast.LENGTH_SHORT).show();
                         }
-                    }
                 });
     }
 

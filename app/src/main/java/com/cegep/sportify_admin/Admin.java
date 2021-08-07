@@ -8,8 +8,8 @@ public class Admin {
     public String image;
     public String returnPolicyUrl;
 
-    public Admin() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    public Admin(){
+        //default constructor
     }
 
     public Admin(String email,String image) {

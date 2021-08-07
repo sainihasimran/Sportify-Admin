@@ -64,6 +64,7 @@ public class SignUpFragment extends Fragment {
 
     Button btnsign;
     TextInputLayout txtmail, txtpswd, brandname,txtcpswd;
+    EditText returnPolicyEditText;
     TextView tvlogin;
     String stringpath;
     ImageView img;
@@ -82,21 +83,12 @@ public class SignUpFragment extends Fragment {
         txtpswd = (TextInputLayout) view.findViewById(R.id.pwd);
         txtcpswd = (TextInputLayout) view.findViewById(R.id.cnfpwd);
         img = (ImageView) view.findViewById(R.id.imgsignup);
-        EditText returnPolicyEditText = view.findViewById(R.id.return_policy_url);
+        returnPolicyEditText = view.findViewById(R.id.return_policy_url);
 
         fauth = FirebaseAuth.getInstance();
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Admin");
 
-//        if(fauth.getCurrentUser() != null)
-//        {
-//            LoginFragment fragment2 = new LoginFragment();
-//            FragmentManager fragmentManager = getFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.fragment_container, fragment2);
-//            fragmentTransaction.commit();
-//
-//        }
 
         btnsign.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,9 +240,11 @@ public class SignUpFragment extends Fragment {
         String bname = brandname.getEditText().getText().toString();
         String adminId = mDatabase.push().getKey();
         String email = txtmail.getEditText().getText().toString();
+        String returnPolicyUrl = returnPolicyEditText.getText().toString();
         Admin admin = new Admin(email,stringpath);
         admin.adminId = adminId;
         admin.brandname = bname;
+        admin.returnPolicyUrl = returnPolicyUrl;
         SportifyAdminApp.admin = admin;
         mDatabase.child(adminId).setValue(admin);
 

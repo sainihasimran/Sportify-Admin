@@ -39,11 +39,13 @@ public class Equipment {
         this.equipmentId = other.equipmentId;
         this.equipmentName = other.equipmentName;
         this.price = other.price;
+        this.salePrice = other.salePrice;
         this.sale = other.sale;
         this.stock = other.stock;
         this.createdAt = other.createdAt;
         this.sport = other.sport;
         this.description = other.description;
+        this.adminId = other.adminId;
         this.images = other.images;
     }
 

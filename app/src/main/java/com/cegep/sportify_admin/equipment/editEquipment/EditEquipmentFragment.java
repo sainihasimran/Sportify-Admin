@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.SportifyAdminApp;
+import com.cegep.sportify_admin.Utils;
 import com.cegep.sportify_admin.home.EquipmentsListFragment;
 import com.cegep.sportify_admin.model.Equipment;
 import com.google.firebase.database.DatabaseReference;
@@ -173,14 +174,13 @@ public class EditEquipmentFragment extends Fragment {
     }
 
     private void editEquipment() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference productsReference = databaseReference.child("Admin").child(SportifyAdminApp.admin.adminId).child("Equipments");
-        DatabaseReference productReference = productsReference.child(equipment.getEquipmentId());
+        DatabaseReference equipmentsReference = Utils.getEquipmentsReference();
+        DatabaseReference equipmentReference = equipmentsReference.child(equipment.getEquipmentId());
         if (equipment.isOnSale()) {
             float salePrice = equipment.getPrice() - ((equipment.getPrice() * equipment.getSale()) / 100);
             equipment.setSalePrice(salePrice);
         }
-        productReference.setValue(equipment);
+        equipmentReference.setValue(equipment);
         requireActivity().finish();
     }
 }

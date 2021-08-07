@@ -10,11 +10,14 @@
     <application
         android:name=".SportifyAdminApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/admin_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/admin_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.SportifyAdmin">
+        <activity
+            android:name=".Orders.OrdersActivity"
+            android:exported="true" />
         <activity
             android:name=".SignUpActivity"
             android:exported="true" />
@@ -30,18 +33,12 @@
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/Theme.SportifyAdmin.NoActionBar" />
-
         <activity android:name=".HomeActivity" />
-
         <activity android:name=".product.addProduct.AddProductActivity" />
         <activity android:name=".equipment.addEquipment.AddEquipmentActivity" />
         <activity android:name=".product.editProduct.EditProductActivity" />
         <activity android:name=".equipment.editEquipment.EditEquipmentActivity" />
-
-        <activity android:name=".settings.ProfileActivity" >
-
-        </activity>
-
+        <activity android:name=".settings.ProfileActivity"></activity>
         <activity android:name=".LoginActivity" />
     </application>
 

@@ -24,7 +24,6 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        setContentView(R.layout.activity_splash);
         imageView=findViewById(R.id.imageView);
 
         Thread timer=new Thread()
@@ -55,7 +54,7 @@ public class Splash extends AppCompatActivity {
                         finish();
                     } else {
                         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                        DatabaseReference databaseReference  = firebaseDatabase.getReference("Admin");
+                        DatabaseReference databaseReference = firebaseDatabase.getReference("Admin");
                         Query query = databaseReference.orderByChild("email").equalTo(currentUser.getEmail());
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override

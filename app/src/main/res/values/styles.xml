@@ -5,4 +5,9 @@
         <item name="chipBackgroundColor">@color/chip_checkable_background</item>
         <item name="android:textColor">@color/chip_text_color</item>
     </style>
+
+    <style name="CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
