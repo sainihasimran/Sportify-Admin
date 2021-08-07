@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cegep.sportify_admin.R;
-import com.cegep.sportify_admin.Orders.PendingOrderFragment;
 import com.cegep.sportify_admin.SportifyAdminApp;
 import com.cegep.sportify_admin.Utils;
 import com.google.firebase.database.DataSnapshot;
@@ -26,23 +25,22 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeclinedOrderFragment extends Fragment {
-
+public class AcceptedOrdersFragment extends Fragment {
     private OrderAdapter orderAdapter;
     private List<Order> orders = new ArrayList<>();
     private TextView emptyView;
 
-    public DeclinedOrderFragment() {
+
+    public AcceptedOrdersFragment() {
         // Required empty public constructor
     }
-
     private final ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             List<Order> orders = new ArrayList<>();
             for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
                 Order order = orderDatasnapshot.getValue(Order.class);
-                if (order != null && "Declined".equalsIgnoreCase(order.getStatus())) {
+                if (order != null && Utils.ORDER_ACCEPTED.equalsIgnoreCase(order.getStatus())) {
                     orders.add(order);
                 }
             }
@@ -65,9 +63,10 @@ public class DeclinedOrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_declined_order, container, false);
+        return inflater.inflate(R.layout.fragment_accepted_order, container, false);
     }
 
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -79,6 +78,7 @@ public class DeclinedOrderFragment extends Fragment {
 
         Query query = clientapdb.getReference("Orders").orderByChild("adminId").equalTo(SportifyAdminApp.admin.adminId);
         query.addValueEventListener(valueEventListener);
+
     }
 
     private void setupRecyclerView(View view) {
@@ -88,4 +88,6 @@ public class DeclinedOrderFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(orderAdapter);
     }
+
+
 }

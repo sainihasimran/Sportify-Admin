@@ -6,6 +6,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Utils {
 
+    public static final String ORDER_PENDING = "pending";
+
+    public static final String ORDER_ACCEPTED = "accepted";
+
+    public static final String ORDER_DECLINED = "declined";
+
     public static DatabaseReference getAdminReference() {
         return FirebaseDatabase.getInstance().getReference("Admin");
     }

@@ -52,14 +52,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         TextView OrderQuantity = holder.OrderQuantity;
         TextView Status = holder.Status;
         Button btndelivered = holder.btndelivered;
-        Button btncancel = holder.btncancel;
+        Button btndecline = holder.btncancel;
 
         if (orders.get(0).getStatus().equals("pending")) {
             btndelivered.setVisibility(View.VISIBLE);
-            btncancel.setVisibility(View.VISIBLE);
+            btndecline.setVisibility(View.VISIBLE);
         } else {
             btndelivered.setVisibility(View.GONE);
-            btncancel.setVisibility(View.GONE);
+            btndecline.setVisibility(View.GONE);
         }
 
         List<String> images;
@@ -90,138 +90,132 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             Status.setText(Character.toUpperCase(orders.get(position).getStatus().charAt(0)) + orders.get(position).getStatus().substring(1));
         }
 
-        if (orders.get(position).getStatus().equals("pending")) {
+        if (Utils.ORDER_PENDING.equalsIgnoreCase(orders.get(position).getStatus())) {
             Status.setTextColor(context.getResources().getColor(R.color.buttonbg));
-        } else if (orders.get(position).getStatus().equals("Accepted")) {
+        } else if (Utils.ORDER_ACCEPTED.equalsIgnoreCase(orders.get(position).getStatus())) {
             Status.setTextColor(context.getResources().getColor(R.color.green));
         } else {
             Status.setTextColor(context.getResources().getColor(R.color.faded_red));
         }
 
-        btndelivered.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btndelivered.setOnClickListener(v -> {
 
-                FirebaseDatabase clientapdb = Utils.getClientDatabase();
+            FirebaseDatabase clientapdb = Utils.getClientDatabase();
 
-                Order order = orders.get(position);
-                boolean isProduct = orders.get(position).getProduct() != null;
-                boolean isEquipment = orders.get(position).getEquipment() != null;
-                DatabaseReference databaseReference = null;
-                if (isProduct) {
-                    databaseReference = Utils.getProductsReference().child(orders.get(position).getProduct().getProductId());
-                } else if (isEquipment) {
-                    databaseReference = Utils.getEquipmentsReference().child(orders.get(position).getEquipment().getEquipmentId());
-                }
+            Order order = orders.get(position);
+            boolean isProduct = orders.get(position).getProduct() != null;
+            boolean isEquipment = orders.get(position).getEquipment() != null;
+            DatabaseReference databaseReference = null;
+            if (isProduct) {
+                databaseReference = Utils.getProductsReference().child(orders.get(position).getProduct().getProductId());
+            } else if (isEquipment) {
+                databaseReference = Utils.getEquipmentsReference().child(orders.get(position).getEquipment().getEquipmentId());
+            }
 
-                if (databaseReference == null) {
-                    return;
-                }
+            if (databaseReference == null) {
+                return;
+            }
 
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String stock_inefficient_to_fulfil_order = "Inefficient stock to fulfil order";
-                        if (isProduct) {
-                            Product product = snapshot.getValue(Product.class);
-                            if (product == null || product.isOutOfStock()) {
-                                Toast.makeText(context, stock_inefficient_to_fulfil_order, Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            String sizeStr = null;
-                            int finalQuantity = 0;
-                            if ("xs".equalsIgnoreCase(order.getSize())) {
-                                sizeStr = "xSmallSize";
-                                finalQuantity = product.getxSmallSize() - order.getQuantity();
-                            } else if ("s".equalsIgnoreCase(order.getSize())) {
-                                sizeStr = "smallSize";
-                                finalQuantity = product.getSmallSize() - order.getQuantity();
-                            } else if ("m".equalsIgnoreCase(order.getSize())) {
-                                sizeStr = "mediumSize";
-                                finalQuantity = product.getMediumSize() - order.getQuantity();
-                            } else if ("l".equalsIgnoreCase(order.getSize())) {
-                                sizeStr = "largeSize";
-                                finalQuantity = product.getLargeSize() - order.getQuantity();
-                            } else if ("xl".equalsIgnoreCase(order.getSize())) {
-                                sizeStr = "xLargeSize";
-                                finalQuantity = product.getxLargeSize() - order.getQuantity();
-                            }
-
-                            if (finalQuantity < 0) {
-                                Toast.makeText(context, stock_inefficient_to_fulfil_order, Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            if (sizeStr != null) {
-                                Utils.getProductsReference().child(orders.get(position).getProduct().getProductId()).child(sizeStr)
-                                        .setValue(finalQuantity);
-                            }
-                        } else {
-                            Equipment equipment = snapshot.getValue(Equipment.class);
-                            if (equipment == null || equipment.isOutOfStock() || equipment.getStock() < order.getQuantity()) {
-                                Toast.makeText(context, stock_inefficient_to_fulfil_order, Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            Utils.getEquipmentsReference().child(orders.get(position).getEquipment().getEquipmentId()).child("stock")
-                                    .setValue(equipment.getStock() - order.getQuantity());
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String stock_inefficient_to_fulfil_order = "Inefficient stock to fulfil order";
+                    if (isProduct) {
+                        Product product = snapshot.getValue(Product.class);
+                        if (product == null || product.isOutOfStock()) {
+                            Toast.makeText(context, stock_inefficient_to_fulfil_order, Toast.LENGTH_SHORT).show();
+                            return;
                         }
 
-                        DatabaseReference statusReference = clientapdb.getReference("Orders")
-                                .child(orders.get(position).getOrderId()).child("status");
-                        statusReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                statusReference.setValue("Accepted");
-                                orders.remove(position);
-                                notifyItemRemoved(position);
-                                notifyItemRangeChanged(position, orders.size());
+                        String sizeStr = null;
+                        int finalQuantity = 0;
+                        if ("xs".equalsIgnoreCase(order.getSize())) {
+                            sizeStr = "xSmallSize";
+                            finalQuantity = product.getxSmallSize() - order.getQuantity();
+                        } else if ("s".equalsIgnoreCase(order.getSize())) {
+                            sizeStr = "smallSize";
+                            finalQuantity = product.getSmallSize() - order.getQuantity();
+                        } else if ("m".equalsIgnoreCase(order.getSize())) {
+                            sizeStr = "mediumSize";
+                            finalQuantity = product.getMediumSize() - order.getQuantity();
+                        } else if ("l".equalsIgnoreCase(order.getSize())) {
+                            sizeStr = "largeSize";
+                            finalQuantity = product.getLargeSize() - order.getQuantity();
+                        } else if ("xl".equalsIgnoreCase(order.getSize())) {
+                            sizeStr = "xLargeSize";
+                            finalQuantity = product.getxLargeSize() - order.getQuantity();
+                        }
 
-                                Toast.makeText(context, "Ordered Accepted", Toast.LENGTH_SHORT).show();
+                        if (finalQuantity < 0) {
+                            Toast.makeText(context, stock_inefficient_to_fulfil_order, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                            }
+                        if (sizeStr != null) {
+                            Utils.getProductsReference().child(orders.get(position).getProduct().getProductId()).child(sizeStr)
+                                    .setValue(finalQuantity);
+                        }
+                    } else {
+                        Equipment equipment = snapshot.getValue(Equipment.class);
+                        if (equipment == null || equipment.isOutOfStock() || equipment.getStock() < order.getQuantity()) {
+                            Toast.makeText(context, stock_inefficient_to_fulfil_order, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
+                        Utils.getEquipmentsReference().child(orders.get(position).getEquipment().getEquipmentId()).child("stock")
+                                .setValue(equipment.getStock() - order.getQuantity());
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                    DatabaseReference statusReference = clientapdb.getReference("Orders")
+                            .child(orders.get(position).getOrderId()).child("status");
+                    statusReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            statusReference.setValue(Utils.ORDER_ACCEPTED);
+                            orders.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, orders.size());
 
-                    }
-                });
-            }
+                            Toast.makeText(context, "Ordered Accepted", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         });
 
-        btncancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btndecline.setOnClickListener(v -> {
 
-                FirebaseDatabase clientapdb = Utils.getClientDatabase();
+            FirebaseDatabase clientapdb = Utils.getClientDatabase();
 
-                DatabaseReference databaseReference = clientapdb.getReference("Orders")
-                        .child(orders.get(position).getOrderId()).child("status");
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        databaseReference.setValue("Declined");
-                        orders.remove(position);
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(position, orders.size());
+            DatabaseReference databaseReference = clientapdb.getReference("Orders")
+                    .child(orders.get(position).getOrderId()).child("status");
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    databaseReference.setValue(Utils.ORDER_DECLINED);
+                    orders.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, orders.size());
 
-                        Toast.makeText(context, "Order declined", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(context, "Order declined", Toast.LENGTH_SHORT).show();
+                }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
-            }
+                }
+            });
         });
     }
 

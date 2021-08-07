@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.cegep.sportify_admin.R;
@@ -26,14 +25,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PendingOrderFragment extends Fragment  {
+public class PendingOrdersFragment extends Fragment  {
 
     private OrderAdapter orderAdapter;
     private List<Order> orders = new ArrayList<>();
     private TextView emptyView;
 
 
-    public PendingOrderFragment() {
+    public PendingOrdersFragment() {
         // Required empty public constructor
     }
 
@@ -43,7 +42,7 @@ public class PendingOrderFragment extends Fragment  {
              List<Order> orders = new ArrayList<>();
             for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
                 Order order = orderDatasnapshot.getValue(Order.class);
-                if (order != null && "pending".equalsIgnoreCase(order.getStatus())) {
+                if (order != null && Utils.ORDER_PENDING.equalsIgnoreCase(order.getStatus())) {
                     orders.add(order);
                 }
             }
@@ -68,7 +67,7 @@ public class PendingOrderFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pending_order, container, false);
+        return inflater.inflate(R.layout.fragment_pending_orders, container, false);
     }
 
     @Override

@@ -25,22 +25,23 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeliveredOrderFragment extends Fragment {
+public class CancelledOrdersFragment extends Fragment {
+
     private OrderAdapter orderAdapter;
     private List<Order> orders = new ArrayList<>();
     private TextView emptyView;
 
-
-    public DeliveredOrderFragment() {
+    public CancelledOrdersFragment() {
         // Required empty public constructor
     }
+
     private final ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             List<Order> orders = new ArrayList<>();
             for (DataSnapshot orderDatasnapshot : snapshot.getChildren()) {
                 Order order = orderDatasnapshot.getValue(Order.class);
-                if (order != null && "Accepted".equalsIgnoreCase(order.getStatus())) {
+                if (order != null && Utils.ORDER_DECLINED.equalsIgnoreCase(order.getStatus())) {
                     orders.add(order);
                 }
             }
@@ -63,10 +64,9 @@ public class DeliveredOrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_delivered_order, container, false);
+        return inflater.inflate(R.layout.fragment_cancelled_orders, container, false);
     }
 
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -78,7 +78,6 @@ public class DeliveredOrderFragment extends Fragment {
 
         Query query = clientapdb.getReference("Orders").orderByChild("adminId").equalTo(SportifyAdminApp.admin.adminId);
         query.addValueEventListener(valueEventListener);
-
     }
 
     private void setupRecyclerView(View view) {
@@ -88,6 +87,4 @@ public class DeliveredOrderFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(orderAdapter);
     }
-
-
 }
