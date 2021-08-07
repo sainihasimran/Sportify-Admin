@@ -10,13 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.cegep.sportify_admin.R;
 import com.cegep.sportify_admin.SportifyAdminApp;
+import com.cegep.sportify_admin.Utils;
 import com.cegep.sportify_admin.home.ProductsListFragment;
 import com.cegep.sportify_admin.model.Product;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -271,8 +275,7 @@ public class EditProductFragment extends Fragment {
     }
 
     private void editProduct() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference productsReference = databaseReference.child("Admin").child(SportifyAdminApp.admin.adminId).child("Products");
+        DatabaseReference productsReference = Utils.getProductsReference();
         DatabaseReference productReference = productsReference.child(product.getProductId());
         if (product.isOnSale()) {
             float salePrice = product.getPrice() - ((product.getPrice() * product.getSale()) / 100);
